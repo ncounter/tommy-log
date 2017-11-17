@@ -46,7 +46,7 @@ def manipulate_source_line(source_line):
         new_line = new_pattern_result.group(0)
 
     # getting rid of non-url slices
-    new_line = re.sub('(?:("POST |"GET | HTTP\/1.1"))', '', new_line)
+    new_line = re.sub('(?:("POST |"GET |"PUT | HTTP\/1.1"))', '', new_line)
 
     # getting rid of the querystring = everything after '?'
     new_line = re.sub('(\?).*', '', new_line)
