@@ -73,7 +73,9 @@ def main():
    regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
    source_file_list = sorted(filter(regex.search, os.listdir(source_path)))
 
-   statistics_file = open(arguments['--stats_file'] , 'w+') #'statistics.json'
+   stats_file_name = arguments['--stats_file']
+   if os.path.exists(stats_file_name): os.remove(stats_file_name)
+   statistics_file = open(stats_file_name , 'w+') #'stats.json'
    new_lines = []
    count = 0
    for source_file_name in source_file_list:
