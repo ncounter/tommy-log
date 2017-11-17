@@ -68,7 +68,10 @@ def main():
 
    source_path = arguments['--source_path'] #'./tomcat_logs_source/'
    
-   source_file_list = sorted(os.listdir(source_path))
+   # evaluate files with the following name pattern only
+   regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
+   source_file_list = sorted(filter(regex.search, os.listdir(source_path)))
+
    statistics_file = open(arguments['--stats_file'] , 'w+') #'statistics.json'
    new_lines = []
    count = 0

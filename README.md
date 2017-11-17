@@ -15,8 +15,6 @@ git clone git@github.com:ncounter/tommy-log.git
 cd tommy-log
 ```
 
-Place all Tomcat log files with the format `localhost_access_log.yyyy-mm-dd.txt` into some `<TOMCAT_SOURCE_LOG_PATH>`.
-
 *IMPORTANT*: the `count_my_urls.py` program makes an assumption about your [log format](https://github.com/ncounter/tommy-log/blob/master/count_my_urls.py#L34) expecting lines like:
 
 `xxx.xxx.xxx.xxx - - [19/Oct/2017:11:00:16 +0200] "POST /my/url/path HTTP/1.1" 200 334`
