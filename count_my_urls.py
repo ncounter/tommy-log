@@ -74,7 +74,7 @@ def main():
    # evaluate files with the following name pattern only
    regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
    source_file_list = sorted(filter(regex.search, os.listdir(source_path)))
-   print 'analizyng', len(source_file_list), 'files..'
+   print 'analizyng', len(source_file_list), 'files:', source_file_list
 
    stats_file_name = arguments['--stats_file']
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
