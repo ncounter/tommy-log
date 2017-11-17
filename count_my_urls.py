@@ -57,14 +57,15 @@ def manipulate_source_line(source_line):
 
 # required params: --source_path , --stats_file
 def main():
+   # check if all param arguments are there
+   regex = re.compile(r'(--source_path|--stats_file)')
+   args_list = filter(regex.search, sys.argv)
+   if len(args_list) < 2:
+      print '"--source_path" and "--stats_file" parameters are required'
+      return
+
    # return a map of arguments { key_name : value }
    arguments = decode_args(sys.argv)
-   
-   #
-   # TODO
-   #
-   # test if required args are there
-   #
 
    source_path = arguments['--source_path'] #'./tomcat_logs_source/'
    
