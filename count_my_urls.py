@@ -55,6 +55,9 @@ def manipulate_source_line(source_line):
 
     return '"' + new_line + '"'
 
+def print_separator():
+    print '----------------------------'
+
 # required params: --source_path , --stats_file
 def main():
    print 'checking arguments..'
@@ -68,14 +71,18 @@ def main():
    # return a map of arguments { key_name : value }
    arguments = args_to_map(sys.argv)
    print 'OK'
-
+   print_separator()
    source_path = arguments['--source_path'] #'./tomcat_logs_source/'
    
    # evaluate files with the following name pattern only
    regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
    source_file_list = sorted(filter(regex.search, os.listdir(source_path)))
-   print 'analizyng', len(source_file_list), 'files:', source_file_list
 
+   print 'analizyng', len(source_file_list), 'files'
+   print_separator()
+   for i in range(0,len(source_file_list)):
+       print str(i+1)+ '. ' + source_file_list[i]
+   print_separator()
    stats_file_name = arguments['--stats_file']
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
    stats_file = open(stats_file_name , 'w+') #'stats.json'
@@ -97,6 +104,7 @@ def main():
    # sort the map from the highest counter to the lowest
    stats_map = OrderedDict(reversed(sorted(stats_map.items(), key=lambda value: value[1])))
    print len(stats_map.keys()), 'distinct URLs found..'
+   print_separator()
 
    # write statistics into JSON format { unique_url : occurrence_count }
    write_line(stats_file, '{"url_hit_stats":[{')
