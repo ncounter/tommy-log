@@ -78,35 +78,33 @@ def main():
 
    stats_file_name = arguments['--stats_file']
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
-   statistics_file = open(stats_file_name , 'w+') #'stats.json'
-   new_lines = []
-   count = 0
+   stats_file = open(stats_file_name , 'w+') #'stats.json'
+
+   # create a map of { unique_url : occurrence_count }
+   stats_map = {}
    for source_file_name in source_file_list:
       with open(source_path + source_file_name, 'r') as current_file:
          for line in tuple(current_file):
-            new_lines.append(manipulate_source_line(line))
-            count = count + 1
+            new_line = manipulate_source_line(line)
+            # if not yet in the map, add it
+            if new_line not in stats_map.keys():
+                stats_map[new_line] = 1
+            # else increase its counter
+            else:
+                stats_map[new_line] = stats_map[new_line] + 1
          current_file.close()
-   
-   # sort and get a list from a numpy array
-   new_lines_sorted = list(np.array(new_lines))
-   
-   # get unique lines
-   unique_lines_index = list(OrderedDict.fromkeys(new_lines_sorted))
-   print len(unique_lines_index), 'distinct URLs found..'
 
-   # create a map of { occurrency_count : unique_url }
-   statistics_map = {}
-   for new_unique_line in unique_lines_index:
-      statistics_map[new_lines_sorted.count(new_unique_line)] = new_unique_line
+   # sort the map from the highest counter to the lowest
+   stats_map = OrderedDict(reversed(sorted(stats_map.items(), key=lambda value: value[1])))
+   print len(stats_map.keys()), 'distinct URLs found..'
 
-   # write statistics into JSON format { unique_url : occurrency_count }
-   write_line(statistics_file, '{"url_hit_stats":[{')
-   for line_key in reversed(sorted(statistics_map)):
-       write_line(statistics_file, statistics_map[line_key] + ' : ' + str(line_key) + ',')
-   write_line(statistics_file, '}]}')
-   statistics_file.close()
-   print 'A new stats file has been generated in "', os.path.abspath(statistics_file.name), '"'
+   # write statistics into JSON format { unique_url : occurrence_count }
+   write_line(stats_file, '{"url_hit_stats":[{')
+   for line_key in stats_map:
+       write_line(stats_file, line_key + ' : ' + str(stats_map[line_key]) + ',')
+   write_line(stats_file, '}]}')
+   stats_file.close()
+   print 'A new stats file has been generated in "', os.path.abspath(stats_file.name), '"'
 
 if __name__ == "__main__":
     main()
