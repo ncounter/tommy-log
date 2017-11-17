@@ -57,6 +57,7 @@ def manipulate_source_line(source_line):
 
 # required params: --source_path , --stats_file
 def main():
+   print 'checking arguments..'
    # check if all param arguments are there
    regex = re.compile(r'(--source_path|--stats_file)')
    args_list = filter(regex.search, sys.argv)
@@ -66,12 +67,14 @@ def main():
 
    # return a map of arguments { key_name : value }
    arguments = decode_args(sys.argv)
+   print 'OK'
 
    source_path = arguments['--source_path'] #'./tomcat_logs_source/'
    
    # evaluate files with the following name pattern only
    regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
    source_file_list = sorted(filter(regex.search, os.listdir(source_path)))
+   print 'analizyng', len(source_file_list), 'files..'
 
    stats_file_name = arguments['--stats_file']
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
@@ -90,6 +93,7 @@ def main():
    
    # get unique lines
    unique_lines_index = list(OrderedDict.fromkeys(new_lines_sorted))
+   print len(unique_lines_index), 'distinct URLs found..'
 
    # create a map of { occurrency_count : unique_url }
    statistics_map = {}
@@ -102,6 +106,7 @@ def main():
        write_line(statistics_file, statistics_map[line_key] + ' : ' + str(line_key) + ',')
    write_line(statistics_file, '}]}')
    statistics_file.close()
+   print 'A new stats file has been generated in "', os.path.abspath(statistics_file.name), '"'
 
 if __name__ == "__main__":
     main()
