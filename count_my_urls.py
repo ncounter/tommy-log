@@ -10,7 +10,7 @@ def write_line(f, s):
    f.write(s + '\n')
    return f
 
-def decode_args(args_list):
+def args_to_map(args_list):
     args_map = {}
     for element in args_list:
        slices = re.split('=', element)
@@ -66,7 +66,7 @@ def main():
       return
 
    # return a map of arguments { key_name : value }
-   arguments = decode_args(sys.argv)
+   arguments = args_to_map(sys.argv)
    print 'OK'
 
    source_path = arguments['--source_path'] #'./tomcat_logs_source/'
