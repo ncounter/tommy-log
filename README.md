@@ -1,5 +1,5 @@
-# tommy-delog
-A python analyzer of Tomcat logs
+# logorator
+A log analyzer
 
 
 
@@ -11,11 +11,11 @@ It analyzes Tomcat log files of your app extracting distinct URLs and the count 
 # How to use
 
 ```
-git clone git@github.com:ncounter/tommy-log.git
-cd tommy-log
+git clone git@github.com:ncounter/logorator.git
+cd logorator
 ```
 
-*IMPORTANT*: the `count_my_urls.py` program makes an assumption about your [log format](https://github.com/ncounter/tommy-log/blob/master/count_my_urls.py#L34) expecting lines like:
+*IMPORTANT*: the `count_my_urls.py` program makes an assumption about your [log format](https://github.com/ncounter/logorator/blob/master/count_my_urls.py#L34) expecting lines like:
 
 `xxx.xxx.xxx.xxx - - [19/Oct/2017:11:00:16 +0200] "POST /my/url/path HTTP/1.1" 200 334`
 
