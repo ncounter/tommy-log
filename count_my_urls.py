@@ -71,10 +71,10 @@ def main():
    regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
    source_file_list = sorted(filter(regex.search, os.listdir(source_path)))
 
-   print 'analizyng', len(source_file_list), 'files'
+   sys.stdout.writelines(['analizyng ', str(len(source_file_list)), ' files'])
    print_separator()
    for i in range(0,len(source_file_list)):
-       print str(i+1)+ '. ' + source_file_list[i]
+       sys.stdout.writelines([str(i+1), '. ', source_file_list[i]])
    print_separator()
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
    stats_file = open(stats_file_name , 'w+') #'stats.json'
@@ -95,7 +95,7 @@ def main():
 
    # sort the map from the highest counter to the lowest
    stats_map = OrderedDict(reversed(sorted(stats_map.items(), key=lambda value: value[1])))
-   print len(stats_map.keys()), 'distinct URLs found..'
+   sys.stdout.writelines([str(len(stats_map.keys())), ' distinct URLs found..'])
    print_separator()
 
    # write statistics into JSON format { unique_url : occurrence_count }
@@ -104,7 +104,8 @@ def main():
        write_line(stats_file, line_key + ' : ' + str(stats_map[line_key]) + ',')
    write_line(stats_file, '}]}')
    stats_file.close()
-   print 'A new stats file has been generated in "', os.path.abspath(stats_file.name), '"'
+   sys.stdout.writelines(['A new stats file has been generated in `', os.path.abspath(stats_file.name), '`'])
+   sys.stdout.write('\n')
 
 if __name__ == "__main__":
     main()
