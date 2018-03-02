@@ -5,18 +5,14 @@ import re
 from collections import OrderedDict
 import numpy as np
 import sys
+import ConfigParser
+
+CONFIG_KEY_NAME = 'logorator'
+CONFIG_FILE_PATH = './logorator.conf'
 
 def write_line(f, s):
    f.write(s + '\n')
    return f
-
-def args_to_map(args_list):
-    args_map = {}
-    for element in args_list:
-       slices = re.split('=', element)
-       if len(slices) > 1:
-          args_map[slices[0]] = slices[1]
-    return args_map
 
 # https://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/valves/AccessLogValve.html
 #
@@ -56,24 +52,21 @@ def manipulate_source_line(source_line):
     return '"' + new_line + '"'
 
 def print_separator():
-    print '----------------------------'
+    sys.stdout.write('\n')
+    sys.stdout.write('-------------------------------------------------------------')
+    sys.stdout.write('\n')
 
-# required params: --source_path , --stats_file
 def main():
-   print 'checking arguments..'
-   # check if all param arguments are there
-   regex = re.compile(r'(--source_path|--stats_file)')
-   args_list = filter(regex.search, sys.argv)
-   if len(args_list) < 2:
-      print '"--source_path" and "--stats_file" parameters are required'
-      return
-
-   # return a map of arguments { key_name : value }
-   arguments = args_to_map(sys.argv)
-   print 'OK'
+   # load and check all param from the config file
+   sys.stdout.writelines(['loading config parameters from `', CONFIG_FILE_PATH, '`'])
    print_separator()
-   source_path = arguments['--source_path'] #'./tomcat_logs_source/'
+
+   config = ConfigParser.ConfigParser()
+   config.read(CONFIG_FILE_PATH)
    
+   source_path = config.get(CONFIG_KEY_NAME, 'tomcat_log_path')
+   stats_file_name = config.get(CONFIG_KEY_NAME, 'stats_file')
+
    # evaluate files with the following name pattern only
    regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
    source_file_list = sorted(filter(regex.search, os.listdir(source_path)))
@@ -83,7 +76,6 @@ def main():
    for i in range(0,len(source_file_list)):
        print str(i+1)+ '. ' + source_file_list[i]
    print_separator()
-   stats_file_name = arguments['--stats_file']
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
    stats_file = open(stats_file_name , 'w+') #'stats.json'
 
