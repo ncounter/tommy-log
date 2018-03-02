@@ -16,7 +16,7 @@ def write_line(f, s):
 
 # https://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/valves/AccessLogValve.html
 #
-# logs pattern="%h %l %u %t &quot;%r&quot; %s %b"
+# logs pattern = %h %l %u %t "%r" %s %b
 #
 # %h - Remote host name (or IP address if enableLookups for the connector is false)
 # %l - Remote logical username from identd (always returns '-')
