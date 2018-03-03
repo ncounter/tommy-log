@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import numpy as np
-import sys, os, re, ConfigParser
+import sys, os, re, ConfigParser, json
 
 CONFIG_KEY_NAME = 'logorator'
 CONFIG_FILE_PATH = './logorator.conf'
@@ -43,7 +43,7 @@ def manipulate_source_line(source_line):
     new_line = re.sub('(\?).*', '', new_line)
     new_line = re.sub('\n', '', new_line)
 
-    return '"' + new_line + '"'
+    return new_line.strip()
 
 # print to standard output the EndOfLine character multiple times
 def print_eol(time = 1):
@@ -106,10 +106,7 @@ def main():
    print_separator()
 
    # write statistics into JSON format { unique_url : occurrence_count }
-   write_line(stats_file, '{"url_hit_stats":[{')
-   for line_key, line_value in stats_map.items():
-       write_line(stats_file, line_key + ' : ' + str(line_value) + ',')
-   write_line(stats_file, '}]}')
+   write_line(stats_file, json.dumps(stats_map))
 
    stats_file.close()
    sys.stdout.writelines(['A new stats file has been generated in `', os.path.abspath(stats_file.name), '`'])
