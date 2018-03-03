@@ -36,10 +36,10 @@ stats_file=<OUTPUT_FILE_NAME>
 
 ### Running
 ```
-python count_my_urls.py
+python url_stats.py
 ```
 
 ### Important
-The `count_my_urls.py` program makes an assumption about your [log format](https://github.com/ncounter/logorator/blob/master/count_my_urls.py#L19) expecting log lines like the following
+The `url_stats.py` program makes an assumption about your [log format](https://github.com/ncounter/logorator/blob/master/url_stats.py#L19) expecting log lines like the following
 
 `xxx.xxx.xxx.xxx - - [19/Oct/2017:11:00:16 +0200] "POST /my/url/path HTTP/1.1" 200 334`
