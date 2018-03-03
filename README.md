@@ -31,8 +31,9 @@ You may want to configure parameters in the `logorator.conf` file first.
 
 ```
 tomcat_log_path=<TOMCAT_LOGS_PATH>
-stats_file=<OUTPUT_FILE_NAME>
+stats_file=./dashboard/stats.json
 ```
+Be aware that changing the `stats_file` parameter will make the **dashboard** web page unable to load data, please make sure you will update the [json source file](https://github.com/ncounter/logorator/blob/master/dashboard/dashboard.js) accordingly.
 
 ### Running
 ```
