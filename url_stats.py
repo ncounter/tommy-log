@@ -1,11 +1,8 @@
 #!/usr/bin/python
 
-import os
-import re
 from collections import OrderedDict
 import numpy as np
-import sys
-import ConfigParser
+import sys, os, re, ConfigParser
 
 CONFIG_KEY_NAME = 'logorator'
 CONFIG_FILE_PATH = './logorator.conf'
