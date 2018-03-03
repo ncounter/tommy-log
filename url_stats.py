@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-from collections import OrderedDict
 import numpy as np
 import sys, os, re, ConfigParser
 
@@ -27,23 +26,21 @@ def write_line(f, s):
 def manipulate_source_line(source_line):
     new_line = source_line
 
-    # remove the %h %l and %u matched by '.*(?=\[)' = anything before '['
-    # and remove the %t matched by '[\[].*[\]]' = anything between '[' and ']'
-    # '.*(?=\[)' + '[\[].*[\]]' = '(.*(?=\]))' = anything before ']'
-    new_line = re.sub('.*(?=\[)[\[].*[\]]', '', new_line)
-
-    # save line request only, getting rid of %s and %b = keep everything between '"' '"'
+    # save line request only, getting rid of %h %l %u %t %s and %b
+    # keep only the %r (everything between '"' '"')
     pattern = re.compile(r'["].*["]', re.MULTILINE|re.IGNORECASE)
     new_pattern_result = pattern.search(new_line)
     if new_pattern_result != None :
         new_line = new_pattern_result.group(0)
 
-    # getting rid of non-url slices
-    new_line = re.sub('(?:("POST |"GET |"PUT | HTTP\/1.1"))', '', new_line)
+    # save the url only
+    pattern = re.compile(r'(\/.*) ', re.MULTILINE|re.IGNORECASE)
+    new_pattern_result = pattern.search(new_line)
+    if new_pattern_result != None :
+        new_line = new_pattern_result.group(0)
 
     # getting rid of the querystring = everything after '?'
     new_line = re.sub('(\?).*', '', new_line)
-
     new_line = re.sub('\n', '', new_line)
 
     return '"' + new_line + '"'
@@ -87,29 +84,33 @@ def main():
 
    # create a map of { unique_url : occurrence_count }
    stats_map = {}
+   distinct_url_set = set()
+   duplicated_url_list = []
+
    for source_file_name in source_file_list:
       with open(source_path + source_file_name, 'r') as current_file:
          for line in tuple(current_file):
             # extract the url from the log line
             new_line = manipulate_source_line(line)
-            # if not yet in the map, add it
-            if new_line not in stats_map.keys():
-                stats_map[new_line] = 1
-            # else increase its counter
-            else:
-                stats_map[new_line] = stats_map[new_line] + 1
+            # keep a distinct list as an index
+            distinct_url_set.add(new_line)
+            # add the url found into the urls bunch
+            duplicated_url_list.append(new_line)
          current_file.close()
 
+   for url in distinct_url_set:
+      stats_map.update({url : duplicated_url_list.count(url)})
+
    # sort the map from the highest counter to the lowest
-   stats_map = OrderedDict(reversed(sorted(stats_map.items(), key=lambda value: value[1])))
-   sys.stdout.writelines([str(len(stats_map.keys())), ' distinct URLs found..'])
+   sys.stdout.writelines([str(len(distinct_url_set)), ' distinct URLs found..'])
    print_separator()
 
    # write statistics into JSON format { unique_url : occurrence_count }
    write_line(stats_file, '{"url_hit_stats":[{')
-   for line_key in stats_map:
-       write_line(stats_file, line_key + ' : ' + str(stats_map[line_key]) + ',')
+   for line_key, line_value in stats_map.items():
+       write_line(stats_file, line_key + ' : ' + str(line_value) + ',')
    write_line(stats_file, '}]}')
+
    stats_file.close()
    sys.stdout.writelines(['A new stats file has been generated in `', os.path.abspath(stats_file.name), '`'])
    sys.stdout.write('\n')

@@ -10,8 +10,8 @@ The generated output that will look like:
 {
   "url_hit_stats":
   [{
-    "/my/url/path/frequently_viewed" : 3958,
     "/my/url/path/normally_viewed" : 194,
+    "/my/url/path/frequently_viewed" : 3958,
     "/my/url/path/seldom_viewed" : 3,
     ...
   }]
