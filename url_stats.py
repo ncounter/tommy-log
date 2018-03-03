@@ -48,10 +48,16 @@ def manipulate_source_line(source_line):
 
     return '"' + new_line + '"'
 
+# print to standard output the EndOfLine character multiple times
+def print_eol(time = 1):
+    for t in range(0,time):
+        sys.stdout.write('\n')
+
+# print to standard output a nice line separator
 def print_separator():
-    sys.stdout.write('\n')
-    sys.stdout.write('-------------------------------------------------------------')
-    sys.stdout.write('\n')
+    print_eol()
+    sys.stdout.write('---')
+    print_eol()
 
 def main():
    # load and check all param from the config file
@@ -69,18 +75,22 @@ def main():
    source_file_list = sorted(filter(regex.search, os.listdir(source_path)))
 
    sys.stdout.writelines(['analizyng ', str(len(source_file_list)), ' files'])
+   print_eol(2)
+
+   # log files list to screen
+   sys.stdout.writelines('\n'.join(source_file_list))
    print_separator()
-   for i in range(0,len(source_file_list)):
-       sys.stdout.writelines([str(i+1), '. ', source_file_list[i]])
-   print_separator()
+
+   # if output file exists, remove it and recreate it
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
-   stats_file = open(stats_file_name , 'w+') #'stats.json'
+   stats_file = open(stats_file_name , 'w+')
 
    # create a map of { unique_url : occurrence_count }
    stats_map = {}
    for source_file_name in source_file_list:
       with open(source_path + source_file_name, 'r') as current_file:
          for line in tuple(current_file):
+            # extract the url from the log line
             new_line = manipulate_source_line(line)
             # if not yet in the map, add it
             if new_line not in stats_map.keys():
