@@ -1,48 +1,43 @@
-/*****************************************************/
-/******************** DEFAULT BEGIN ******************/
-/*****************************************************/
-
-/* Reset all default rules */
-body, a, ul, li, div, span, p,
-header, footer, menu, aside, section, nav,
-img, button, select, input, textarea, i, em, strong,
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  padding: 0;
-  font-size: inherit;
-  border: none;
-  color: inherit;
-  text-decoration: none;
-  box-sizing: border-box;
-  vertical-align: middle;
-}
-
-html, body {
-  background-color: #F7F7F7;
-  color: #363636;
-  font-size: 14px;
-  font-family: 'Gudea', 'Cantarell', 'Armata', 'Exo',
-    'Open Sans', 'Roboto', 'Source Sans Pro', 'Lato', sans-serif;
-  font-weight: 300;
-  width: 100%;
-}
-a, a:hover, a:visited {
-  color: inherit;
-  text-decoration: none;
-  outline: none;
-}
-a:disabled {
-  color: #aaa;
-}
-
-/*****************************************************/
-/******************** DEFAULT END ********************/
-/*****************************************************/
-
 header {
   padding: 1em;
   background-color: #363636;
   color: #F7F7F7;
   text-align: center;
   font-size: 1.6em;
+}
+
+.dashboard {
+  max-width: 80%;
+  margin: auto;
+}
+
+.loading {
+  width: 100%;
+  text-align: center;
+  padding: 5em;
+}
+
+table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  margin: auto;
+}
+table tr {
+  border: 1px solid #ccc;
+}
+table thead,
+table tfoot {
+  font-size: 1.1em;
+  background-color: #eaeaea;
+}
+
+table tr td,
+table tr th {
+  border: 1px solid #ccc;
+  padding: 1em;
+}
+table tr th.center,
+table tr td.center {
+  text-align: center;
 }

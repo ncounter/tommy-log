@@ -22,22 +22,31 @@ class Dashboard extends Component {
   render() {
     const serverData = this.state.data;
     return (
-      <div className="App-intro">
-        <div>{ serverData ? 'loaded' : 'not loaded yet' }</div>
+      <div className="dashboard">
         <table>
+          <colgroup>
+            <col width="85%"/>
+            <col width="15%"/>
+          </colgroup>
           <thead>
             <tr>
               <th>url</th>
-              <th>count</th>
+              <th className="center">count</th>
             </tr>
           </thead>
           <tbody>
             {
               serverData ?
               Object.keys(serverData).map(k => <tr key={k}><td>{k}</td><td className='center'>{serverData[k]}</td></tr>)
-              : null
+              : <tr><td colSpan="2" className="loading"><img className="icon" src="/loading.gif" alt="loading.." /></td></tr>
             }
           </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     );
