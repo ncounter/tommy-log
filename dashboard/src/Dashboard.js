@@ -8,6 +8,10 @@ class Dashboard extends Component {
     };
   }
 
+  componentWillMount() {
+    this.props.setTitle('How many times your urls have been hitten?');
+  }
+
   componentDidMount() {
     let url = 'stats.json';
 

@@ -3,13 +3,26 @@ import './App.css';
 import Dashboard from './Dashboard';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: 'App'
+    }
+  }
+
+  setTitle(newTitle) {
+    this.setState({
+      title: newTitle
+    });
+  }
+
   render() {
     return (
       <div>
         <header>
-          <h3>How many times your app urls have been hitten?</h3>
+          <h3>{this.state.title}</h3>
         </header>
-        <Dashboard />
+        <Dashboard setTitle={(title) => this.setTitle(title)} />
       </div>
     );
   }
