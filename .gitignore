@@ -1,3 +1,14 @@
-stats.json
-count-my-urls.html
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# misc
 .vscode/
+
+# dependencies
+*/node_modules
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# output generated files
+stats.json

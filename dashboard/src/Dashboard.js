@@ -1,11 +1,14 @@
-const Dashboard = React.createClass({
-  getInitialState: function() {
-    return {
-      data: null
-    }
-  },
+import React, { Component } from 'react';
 
-  componentDidMount: function() {
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: null
+    };
+  }
+
+  componentDidMount() {
     let url = 'stats.json';
 
     fetch(url)
@@ -14,12 +17,12 @@ const Dashboard = React.createClass({
       this.setState({ data: jsonData });
     })
     .catch(err => { throw err });
-  },
+  }
 
-  render: function() {
+  render() {
     const serverData = this.state.data;
     return (
-      <div>
+      <div className="App-intro">
         <div>{ serverData ? 'loaded' : 'not loaded yet' }</div>
         <table>
           <thead>
@@ -39,9 +42,6 @@ const Dashboard = React.createClass({
       </div>
     );
   }
-});
+}
 
-ReactDOM.render(
-  <Dashboard />,
-  document.getElementById('dashboard')
-);
+export default Dashboard;

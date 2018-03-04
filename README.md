@@ -2,7 +2,7 @@
 A log analyzer
 
 
-## What it does
+# What it does
 It analyzes Tomcat log files of your web app extracting **distinct URLs** and the **count visit** for each into a JSON `key:value` file format for `url:visit_count`
 
 The generated output that will look like:
@@ -18,29 +18,47 @@ The generated output that will look like:
 }
 ```
 
-## How to use
+# How to use
 
-### Get the source project
+## Get the source project
 ```
 git clone git@github.com:ncounter/logorator.git
 cd logorator
 ```
 
-### Configuration
+## Configuration
 You may want to configure parameters in the `logorator.conf` file first.
 
 ```
 tomcat_log_path=<TOMCAT_LOGS_PATH>
-stats_file=./dashboard/stats.json
+stats_file=./dashboard/public/stats.json
 ```
 Be aware that changing the `stats_file` parameter will make the **dashboard** web page unable to load data, please make sure you will update the [json source file](https://github.com/ncounter/logorator/blob/master/dashboard/dashboard.js) accordingly.
 
-### Running
-```
-python url_stats.py
-```
+
+## Python analyzer
 
 ### Important
 The `url_stats.py` program makes an assumption about your [log format](https://github.com/ncounter/logorator/blob/master/url_stats.py#L19) expecting log lines like the following
 
 `xxx.xxx.xxx.xxx - - [19/Oct/2017:11:00:16 +0200] "POST /my/url/path HTTP/1.1" 200 334`
+
+### Running
+```
+cd logorator
+python url_stats.py
+```
+
+## Dashboard web page
+
+### Requirements
+
+- Nodejs
+- Yarn
+
+### Running
+```
+cd logorator/dashboard
+yarn install
+yarn start
+```

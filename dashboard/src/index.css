@@ -1,0 +1,20 @@
+table {
+  text-align: left;
+  border-collapse: collapse;
+}
+table tr {
+  border: 1px solid #ccc;
+}
+table thead {
+  font-size: 1.1em;
+  background-color: #eaeaea;
+}
+
+table tr td,
+table tr th {
+  border: 1px solid #ccc;
+  padding: 1em;
+}
+table tr td.center {
+  text-align: center;
+}
