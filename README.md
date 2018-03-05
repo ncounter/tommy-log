@@ -1,5 +1,8 @@
 # logorator
-A log analyzer
+A log grinder to extract statistics
+
+1. a backend python log grinder to analyze, extract and compute information
+2. a web dashboard to view results from the backend analysis
 
 
 # What it does
@@ -8,13 +11,10 @@ It analyzes Tomcat log files of your web app extracting **distinct URLs** and th
 The generated output that will look like:
 ```
 {
-  "url_hit_stats":
-  [{
-    "/my/url/path/normally_viewed" : 194,
-    "/my/url/path/frequently_viewed" : 3958,
-    "/my/url/path/seldom_viewed" : 3,
-    ...
-  }]
+  "/my/url/path/normally_viewed" : 194,
+  "/my/url/path/frequently_viewed" : 3958,
+  "/my/url/path/seldom_viewed" : 3,
+  ...
 }
 ```
 
@@ -39,22 +39,23 @@ Be aware that changing the `stats_file` parameter will make the **dashboard** we
 ## Python analyzer
 
 ### Important
-The `url_stats.py` program makes an assumption about your [log format](https://github.com/ncounter/logorator/blob/master/url_stats.py#L19) expecting log lines like the following
+The `url_stats.py` program makes an assumption about your [log format](https://github.com/ncounter/logorator/blob/master/url_stats.py#L13) expecting log lines with **the request** information containing the **url** wrapped between `""`, something like the following for instance:
 
-`xxx.xxx.xxx.xxx - - [19/Oct/2017:11:00:16 +0200] "POST /my/url/path HTTP/1.1" 200 334`
+`192.168.1.101 - - [19/Oct/2017:11:00:16 +0200] "POST /my/url/path HTTP/1.1" 200 334`
 
 ### Running
 ```
 cd logorator
 python url_stats.py
+less ./dashboard/public/stats.json
 ```
 
 ## Dashboard web page
 
 ### Requirements
 
-- Nodejs
-- Yarn
+1. Nodejs
+2. Yarn
 
 ### Running
 ```
