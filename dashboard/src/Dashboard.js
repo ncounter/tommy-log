@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Loading from './Loading';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -41,8 +42,20 @@ class Dashboard extends Component {
           <tbody>
             {
               serverData ?
-              Object.keys(serverData).sort((j, k) => !(serverData[j] > serverData[k])).map(k => <tr key={k}><td>{k}</td><td className='center'>{serverData[k]}</td></tr>)
-              : <tr><td colSpan="2" className="loading"><img className="icon" src="/loading.gif" alt="loading.." /></td></tr>
+                Object.keys(serverData)
+                    .sort((j, k) => !(serverData[j] > serverData[k]))
+                    .map(k =>
+                      <tr key={k}>
+                        <td>{k}</td>
+                        <td className='center'>{serverData[k]}</td>
+                      </tr>
+                    )
+                :
+                <tr>
+                  <td colSpan="2">
+                    <Loading altText='loading...' />
+                  </td>
+                </tr>
             }
           </tbody>
           <tfoot>
