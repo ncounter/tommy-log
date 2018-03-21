@@ -41,3 +41,22 @@ table tr th.center,
 table tr td.center {
   text-align: center;
 }
+
+.form-field-wrapper * {
+  vertical-align: middle;
+  margin: .5em;
+}
+.form-field-wrapper label {
+  font-weight: 600;
+}
+.form-field-wrapper input {
+  padding: .3em .5em;
+  border: 1px solid #eaeaea;
+}
+.form-field-wrapper input:focus {
+  border: 1px solid #abc;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
