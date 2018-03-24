@@ -12,3 +12,4 @@ yarn-error.log*
 
 # output generated files
 stats.json
+patterns.json

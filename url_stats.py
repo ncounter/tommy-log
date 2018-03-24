@@ -66,6 +66,7 @@ def main():
    
    source_path = config.get(CONFIG_KEY_NAME, 'tomcat_log_path')
    stats_file_name = config.get(CONFIG_KEY_NAME, 'stats_file')
+   pattern_file_name = config.get(CONFIG_KEY_NAME, 'pattern_file')
 
    # evaluate files with the following name pattern only
    regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
@@ -81,35 +82,56 @@ def main():
    # if output file exists, remove it and recreate it
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
    stats_file = open(stats_file_name , 'w+')
+   if os.path.exists(pattern_file_name): os.remove(pattern_file_name)
+   pattern_file = open(pattern_file_name , 'w+')
 
    # create a map of { unique_url : occurrence_count }
    stats_map = {}
+   pattern_map = {}
    distinct_url_set = set()
    duplicated_url_list = []
 
    for source_file_name in source_file_list:
       with open(source_path + source_file_name, 'r') as current_file:
+         prev_url = None
          for line in tuple(current_file):
             # extract the url from the log line
-            new_line = manipulate_source_line(line)
+            current_url = manipulate_source_line(line)
             # keep a distinct list as an index
-            distinct_url_set.add(new_line)
+            distinct_url_set.add(current_url)
             # add the url found into the urls bunch
-            duplicated_url_list.append(new_line)
+            duplicated_url_list.append(current_url)
+
+            # map the pattern flow {fromUrl:{toUrl:count}}
+            if prev_url is not None:
+                if prev_url in pattern_map:
+                    to_url_map = pattern_map[prev_url]
+                    if current_url in to_url_map:
+                        to_url_map[current_url] = to_url_map[current_url] + 1
+                    else:
+                        to_url_map[current_url] = 1
+                else:
+                    pattern_map[prev_url] = {current_url:1}
+            prev_url = current_url
          current_file.close()
 
    for url in distinct_url_set:
       stats_map.update({url : duplicated_url_list.count(url)})
 
-   # sort the map from the highest counter to the lowest
    sys.stdout.writelines([str(len(distinct_url_set)), ' distinct URLs found..'])
    print_separator()
 
    # write statistics into JSON format { unique_url : occurrence_count }
    write_line(stats_file, json.dumps(stats_map))
 
+   write_line(pattern_file, json.dumps(pattern_map))
+
    stats_file.close()
    sys.stdout.writelines(['A new stats file has been generated in `', os.path.abspath(stats_file.name), '`'])
+   sys.stdout.write('\n')
+
+   pattern_file.close()
+   sys.stdout.writelines(['A new stats file has been generated in `', os.path.abspath(pattern_file.name), '`'])
    sys.stdout.write('\n')
 
 if __name__ == "__main__":
