@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Loading from './Loading';
-import TextInput from './Fields';
+import { TextInput, Toggle } from './Fields';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -8,7 +8,9 @@ class Dashboard extends Component {
     this.state = {
       data: null,
       urlCriteria: '',
-      urlCriteriaOut: ''
+      urlCriteriaOut: '',
+      urlHideDownload: true,
+      urlHideDwr: true
     };
 
     ['urlFilter', 'urlFilterOut']
@@ -38,6 +40,14 @@ class Dashboard extends Component {
     this.setState({ urlCriteriaOut: criteria });
   }
 
+  urlHideDownload(isActive) {
+    this.setState({ urlHideDownload: isActive });
+  }
+
+  urlHideDwr(isActive) {
+    this.setState({ urlHideDwr: isActive });
+  }
+
   filterData() {
     var data = Object.keys(this.state.data);
     if (this.state.urlCriteria.length > 0) {
@@ -45,6 +55,12 @@ class Dashboard extends Component {
     }
     if (this.state.urlCriteriaOut.length > 0) {
       data = data.filter(d => !d.includes(this.state.urlCriteriaOut));
+    }
+    if (this.state.urlHideDownload) {
+      data = data.filter(d => !d.includes('/rhn/manager/download/'));
+    }
+    if (this.state.urlHideDwr) {
+      data = data.filter(d => !d.includes('/rhn/dwr/'));
     }
     return data;
   }
@@ -55,6 +71,10 @@ class Dashboard extends Component {
 
   render() {
     const serverData = this.state.data;
+    let data = [];
+    if (serverData) {
+      data = this.normalizedData(serverData);
+    }
     return (
       <div className="dashboard">
         <TextInput
@@ -76,6 +96,22 @@ class Dashboard extends Component {
             label={'filter-out by url'}
             classStyle='d-inline-block'
         />
+        &nbsp;
+        <Toggle
+            name='urlHideDownload'
+            initialValue={this.state.urlHideDownload}
+            onChange={(isChecked) => this.urlHideDownload(isChecked)}
+            label={'hide \'/rhn/manager/download/\' urls'}
+            classStyle='d-inline-block'
+        />
+        &nbsp;
+        <Toggle
+            name='urlHideDwr'
+            initialValue={this.state.urlHideDwr}
+            onChange={(isChecked) => this.urlHideDwr(isChecked)}
+            label={'hide \'/rhn/dwr/\' download'}
+            classStyle='d-inline-block'
+        />
         <table>
           <colgroup>
             <col width="85%"/>
@@ -83,15 +119,14 @@ class Dashboard extends Component {
           </colgroup>
           <thead>
             <tr>
-              <th>url</th>
+              <th>url [{data.length}]</th>
               <th className="center">count</th>
             </tr>
           </thead>
           <tbody>
             {
               serverData ?
-                this.normalizedData(serverData)
-                    .sort((j, k) => !(serverData[j] > serverData[k]))
+                data.sort((j, k) => !(serverData[j] > serverData[k]))
                     .map(k =>
                       <tr key={k}>
                         <td>{k}</td>
