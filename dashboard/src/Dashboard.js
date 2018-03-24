@@ -77,77 +77,81 @@ class Dashboard extends Component {
     }
     return (
       <div className="dashboard">
-        <TextInput
-            type='text'
-            name='urlCriteria'
-            initialValue={this.state.urlCriteria}
-            placeholder='keep-in by url'
-            onChange={this.urlFilter}
-            label={'filter-in by url'}
-            classStyle='d-inline-block'
-        />
-        &nbsp;
-        <TextInput
-            type='text'
-            name='urlCriteriaOut'
-            initialValue={this.state.urlCriteriaOut}
-            placeholder='exclude by url'
-            onChange={this.urlFilterOut}
-            label={'filter-out by url'}
-            classStyle='d-inline-block'
-        />
-        &nbsp;
-        <Toggle
-            name='urlHideDownload'
-            initialValue={this.state.urlHideDownload}
-            onChange={(isChecked) => this.urlHideDownload(isChecked)}
-            label={'hide \'/rhn/manager/download/\' urls'}
-            classStyle='d-inline-block'
-        />
-        &nbsp;
-        <Toggle
-            name='urlHideDwr'
-            initialValue={this.state.urlHideDwr}
-            onChange={(isChecked) => this.urlHideDwr(isChecked)}
-            label={'hide \'/rhn/dwr/\' download'}
-            classStyle='d-inline-block'
-        />
-        <table>
-          <colgroup>
-            <col width="85%"/>
-            <col width="15%"/>
-          </colgroup>
-          <thead>
-            <tr>
-              <th>url [{data.length}]</th>
-              <th className="center">count</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              serverData ?
-                data.sort((j, k) => !(serverData[j] > serverData[k]))
-                    .map(k =>
-                      <tr key={k}>
-                        <td>{k}</td>
-                        <td className='center'>{serverData[k]}</td>
-                      </tr>
-                    )
-                :
-                <tr>
-                  <td colSpan="2">
-                    <Loading altText='loading...' />
-                  </td>
-                </tr>
-            }
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
-          </tfoot>
-        </table>
+        <aside>
+          <TextInput
+              type='text'
+              name='urlCriteria'
+              initialValue={this.state.urlCriteria}
+              placeholder='keep-in by url'
+              onChange={this.urlFilter}
+              label={'filter-in by url'}
+              classStyle='d-inline-block'
+          />
+          &nbsp;
+          <TextInput
+              type='text'
+              name='urlCriteriaOut'
+              initialValue={this.state.urlCriteriaOut}
+              placeholder='exclude by url'
+              onChange={this.urlFilterOut}
+              label={'filter-out by url'}
+              classStyle='d-inline-block'
+          />
+          &nbsp;
+          <Toggle
+              name='urlHideDownload'
+              initialValue={this.state.urlHideDownload}
+              onChange={(isChecked) => this.urlHideDownload(isChecked)}
+              label={'hide \'/rhn/manager/download/\' urls'}
+              classStyle='d-inline-block'
+          />
+          &nbsp;
+          <Toggle
+              name='urlHideDwr'
+              initialValue={this.state.urlHideDwr}
+              onChange={(isChecked) => this.urlHideDwr(isChecked)}
+              label={'hide \'/rhn/dwr/\' download'}
+              classStyle='d-inline-block'
+          />
+        </aside>
+        <section>
+          <table>
+            <colgroup>
+              <col width="85%"/>
+              <col width="15%"/>
+            </colgroup>
+            <thead>
+              <tr>
+                <th>url [{data.length}]</th>
+                <th className="center">count</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                serverData ?
+                  data.sort((j, k) => !(serverData[j] > serverData[k]))
+                      .map((k, index) =>
+                        <tr className={index % 2 == 0 ? 'even-row' : 'odd-row'} key={k}>
+                          <td>{k}</td>
+                          <td className='center'>{serverData[k]}</td>
+                        </tr>
+                      )
+                  :
+                  <tr>
+                    <td colSpan="2">
+                      <Loading altText='loading...' />
+                    </td>
+                  </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </section>
       </div>
     );
   }

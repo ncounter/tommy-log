@@ -6,6 +6,17 @@ header {
   font-size: 1.6em;
 }
 
+aside, section {
+  display: inline-block;
+  vertical-align: top;
+}
+aside {
+  width: 20%;
+}
+section {
+  width: 80%;
+}
+
 .dashboard {
   margin: auto;
   padding: 1em;
@@ -23,23 +34,32 @@ table {
   border-collapse: collapse;
   margin: auto;
 }
-table tr {
-  border: 1px solid #ccc;
-}
 table thead,
 table tfoot {
   font-size: 1.1em;
-  background-color: #eaeaea;
+  background-color: #bcd;
 }
 
 table tr td,
 table tr th {
-  border: 1px solid #ccc;
+  border: 1px solid #bbb;
   padding: 1em;
 }
 table tr th.center,
 table tr td.center {
   text-align: center;
+}
+
+table tr.even-row td {
+  background-color: #f0f0f0;
+}
+
+table tr.odd-row td {
+  background-color: #fafafa;
+}
+
+table tr:hover td {
+  background-color: #bdc;
 }
 
 .form-field-wrapper * {
