@@ -36,9 +36,9 @@ class App extends Component {
         <header>
           <h3>{this.state.title}</h3>
         </header>
-        <div>
-          <a href="#Dashboard" onClick={() => this.currentPage('#Dashboard')}>Dashboard</a>&nbsp;
-          <a href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Patterns</a>
+        <div className='tabs-wrapper'>
+          <a className={'tab ' + (this.state.page === '#Dashboard' ? 'active' : '')} href="#Dashboard" onClick={() => this.currentPage('#Dashboard')}>Dashboard</a>
+          <a className={'tab ' + (this.state.page === '#Patterns' ? 'active' : '')} href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Patterns</a>
         </div>
         {
           this.state.page === '#Dashboard' ?
