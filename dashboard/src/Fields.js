@@ -52,7 +52,7 @@ export class Toggle extends Component {
   render() {
     return (
       <div className={'form-field-wrapper ' + this.props.classStyle} >
-        <label for={this.props.name}>{this.props.label}</label>
+        <label htmlFor={this.props.name}>{this.props.label}</label>
         <input
             type='checkbox'
             id={this.props.name}

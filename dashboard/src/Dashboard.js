@@ -73,7 +73,7 @@ class Dashboard extends Component {
     const serverData = this.state.data;
     let data = [];
     if (serverData) {
-      data = this.normalizedData(serverData);
+      data = this.normalizedData();
     }
     return (
       <div className="dashboard">
@@ -129,7 +129,7 @@ class Dashboard extends Component {
                 serverData ?
                   data.sort((j, k) => !(serverData[j] > serverData[k]))
                       .map((k, index) =>
-                        <tr className={index % 2 == 0 ? 'even-row' : 'odd-row'} key={k}>
+                        <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
                           <td>{k}</td>
                           <td className='center'>{serverData[k]}</td>
                         </tr>
