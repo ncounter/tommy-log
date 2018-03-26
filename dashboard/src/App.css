@@ -12,9 +12,18 @@ aside, section {
 }
 aside {
   width: 20%;
+  padding-right: 1em;
 }
 section {
   width: 80%;
+}
+
+aside h3 {
+  font-size: 1.3em;
+  padding: .5em;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
 }
 
 .dashboard {
@@ -62,16 +71,27 @@ table tr:hover td {
   background-color: #bdc;
 }
 
+.form-field-wrapper {
+  width: 100%;
+  padding: .5em 0;
+  border-bottom: 1px solid  #eaeaea;
+}
 .form-field-wrapper * {
   vertical-align: middle;
-  margin: .5em;
 }
 .form-field-wrapper label {
   font-weight: 600;
+  width: 50%;
+  display: inline-block;
+  padding: .5em;
 }
 .form-field-wrapper input {
   padding: .3em .5em;
   border: 1px solid #eaeaea;
+  display: inline-block;
+}
+.form-field-wrapper input[type="text"] {
+  width: 50%;
 }
 .form-field-wrapper input:focus {
   border: 1px solid #abc;

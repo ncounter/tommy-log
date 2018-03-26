@@ -3,7 +3,7 @@
 /*****************************************************/
 
 /* Reset all default rules */
-body, a, ul, li, div, span, p,
+body, a, ul, li, div, span, p, label,
 header, footer, menu, aside, section, nav,
 img, button, select, input, textarea, i, em, strong,
 h1, h2, h3, h4, h5, h6 {

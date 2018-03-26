@@ -78,6 +78,7 @@ class Dashboard extends Component {
     return (
       <div className="dashboard">
         <aside>
+          <h3>Filters</h3>
           <TextInput
               type='text'
               name='urlCriteria'
@@ -87,7 +88,6 @@ class Dashboard extends Component {
               label={'filter-in by url'}
               classStyle='d-inline-block'
           />
-          &nbsp;
           <TextInput
               type='text'
               name='urlCriteriaOut'
@@ -97,7 +97,6 @@ class Dashboard extends Component {
               label={'filter-out by url'}
               classStyle='d-inline-block'
           />
-          &nbsp;
           <Toggle
               name='urlHideDownload'
               initialValue={this.state.urlHideDownload}
@@ -105,7 +104,6 @@ class Dashboard extends Component {
               label={'hide \'/rhn/manager/download/\' urls'}
               classStyle='d-inline-block'
           />
-          &nbsp;
           <Toggle
               name='urlHideDwr'
               initialValue={this.state.urlHideDwr}
