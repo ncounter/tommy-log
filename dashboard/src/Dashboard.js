@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Loading from './Loading';
 import { TextInput, Toggle } from './Fields';
+import Pagination from './Pagination';
 
 const PATTERN_CRITERIA = {
   download : /.*(download).*/i,
@@ -26,9 +27,11 @@ class Dashboard extends Component {
       urlCriteria: '',
       urlCriteriaOut: '',
       hiddenCriteria: Object.values(PATTERN_CRITERIA),
+      currentPage: 1,
+      itemsPerPage: 10
     };
 
-    ['urlFilter', 'urlFilterOut']
+    ['urlFilter', 'urlFilterOut', 'changePage', 'changeItemsPerPage']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -59,6 +62,14 @@ class Dashboard extends Component {
     this.setState({ hiddenCriteria: toggleElementFromArray(criteria, this.state.hiddenCriteria) });
   }
 
+  changePage(page) {
+    this.setState({currentPage : page})
+  }
+
+  changeItemsPerPage(itemsPerPage) {
+    this.setState({itemsPerPage: itemsPerPage});
+  }
+
   validateRegEx(exp) {
     try {
       ''.match(exp);
@@ -69,8 +80,7 @@ class Dashboard extends Component {
     return true;
   }
 
-  filterData() {
-    var data = Object.keys(this.state.data);
+  filterData(data) {
     if (this.state.urlCriteria.length > 0) {
       try {
         data = data.filter(d => d.match(this.state.urlCriteria));
@@ -93,15 +103,22 @@ class Dashboard extends Component {
     return data;
   }
 
+  paginatedData(data) {
+    return data.slice((this.state.currentPage - 1) * this.state.itemsPerPage, this.state.currentPage * this.state.itemsPerPage)
+  }
+
   normalizedData() {
-    return this.filterData();
+    const keys = Object.keys(this.state.data);
+    return this.filterData(keys);
   }
 
   render() {
     const serverData = this.state.data;
     let data = [];
+    let dataLength = 0;
     if (serverData) {
       data = this.normalizedData();
+      dataLength = data.length;
     }
     return (
       <div className="dashboard">
@@ -153,7 +170,7 @@ class Dashboard extends Component {
             <tbody>
               {
                 serverData ?
-                  data.sort((j, k) => !(serverData[j] > serverData[k]))
+                  this.paginatedData(data.sort((j, k) => !(serverData[j] > serverData[k])))
                       .map((k, index) =>
                         <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
                           <td>{k}</td>
@@ -170,8 +187,15 @@ class Dashboard extends Component {
             </tbody>
             <tfoot>
               <tr>
-                <td></td>
-                <td></td>
+                <td colSpan={2}>
+                  <Pagination
+                      dataLength={dataLength}
+                      currentPage={this.state.currentPage}
+                      itemsPerPage={this.state.itemsPerPage}
+                      onChangePage={this.changePage}
+                      onChangeItemsPerPage={this.changeItemsPerPage}
+                  />
+                </td>
               </tr>
             </tfoot>
           </table>

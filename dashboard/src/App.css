@@ -44,10 +44,10 @@ aside h3 {
   border-right: 1px solid #ddd;
 }
 .tabs-wrapper .tab.active {
-  background-color: #d0dbeb;
+  background-color: #bdc;
 }
 .tabs-wrapper .tab:hover {
-  background-color: #cdb;
+  background-color: #fec;
 }
 
 .dashboard {
@@ -70,7 +70,7 @@ table {
 table thead th,
 table tfoot td {
   font-size: 1.1em;
-  background-color: #d0dbeb;
+  background-color: #bcd;
   border: 1px solid #bbb;
 }
 
@@ -84,16 +84,16 @@ table tr td.center {
   text-align: center;
 }
 
-table tr.even-row td {
+table tbody tr.even-row td {
   background-color: #f0f0f0;
 }
 
-table tr.odd-row td {
+table tbody tr.odd-row td {
   background-color: #fafafa;
 }
 
-table tr:hover td {
-  background-color: #bdc;
+table tbody tr:hover td {
+  background-color: #fec;
 }
 
 .form-field-wrapper {
@@ -118,13 +118,42 @@ table tr:hover td {
 .form-field-wrapper input[type="text"] {
   width: 50%;
 }
-.form-field-wrapper input:focus {
-  border: 1px solid #d0dbeb;
-}
 .form-field-wrapper.error input {
   border-color: #f30;
 }
 
+input:focus {
+  border: 1px solid #d0dbeb;
+}
+
+button, select {
+  background-color: #eee;
+  border: 1px solid #aaa;
+  padding: .2em .5em;
+}
+.button-group button {
+  border-right: 0;
+}
+button:hover {
+  background-color: #fec;
+}
+button[disabled],
+button[disabled]:hover {
+  color: #aaa;
+  background-color: #ddd;
+}
+
 .d-inline-block {
   display: inline-block;
+}
+.text-right {
+  text-align: right;
+}
+
+.pagination {
+  font-size: 90%;
+}
+
+.button-group button:last-of-type {
+  border-right: 1px solid #aaa;
 }
