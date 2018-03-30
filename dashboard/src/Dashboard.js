@@ -3,9 +3,9 @@ import Loading from './Loading';
 import { TextInput, Toggle } from './Fields';
 
 const PATTERN_CRITERIA = {
-  download : '/rhn/manager/download/',
-  dwr : '/rhn/dwr/',
-  api: '/rhn/manager/api/'
+  download : /.*(download).*/i,
+  dwr : /.*(dwr).*/i,
+  api: /.*(rpc\/api).*/i
 }
 
 function toggleElementFromArray(element, array) {
@@ -59,16 +59,36 @@ class Dashboard extends Component {
     this.setState({ hiddenCriteria: toggleElementFromArray(criteria, this.state.hiddenCriteria) });
   }
 
+  validateRegEx(exp) {
+    try {
+      ''.match(exp);
+    }
+    catch (Exception){
+      return false;
+    }
+    return true;
+  }
+
   filterData() {
     var data = Object.keys(this.state.data);
     if (this.state.urlCriteria.length > 0) {
-      data = data.filter(d => d.includes(this.state.urlCriteria));
+      try {
+        data = data.filter(d => d.match(this.state.urlCriteria));
+      }
+      catch (Exception){
+        console.log('Invalid regex [' + Exception + ']');
+      }
     }
     if (this.state.urlCriteriaOut.length > 0) {
-      data = data.filter(d => !d.includes(this.state.urlCriteriaOut));
+      try {
+        data = data.filter(d => !d.match(this.state.urlCriteriaOut));
+      }
+      catch (Exception) {
+        console.log('Invalid regex [' + Exception + ']');
+      }
     }
 
-    this.state.hiddenCriteria.forEach(c => data = data.filter(d => !d.includes(c)));
+    this.state.hiddenCriteria.forEach(c => data = data.filter(d => !d.match(c)));
 
     return data;
   }
@@ -91,19 +111,19 @@ class Dashboard extends Component {
               type='text'
               name='urlCriteria'
               initialValue={this.state.urlCriteria}
-              placeholder='keep-in by url'
+              placeholder='keep-in by url [use regex]'
               onChange={this.urlFilter}
               label={'filter-in by url'}
-              classStyle='d-inline-block'
+              classStyle={'d-inline-block ' + (this.validateRegEx(this.state.urlCriteria) ? '' : 'error')}
           />
           <TextInput
               type='text'
               name='urlCriteriaOut'
               initialValue={this.state.urlCriteriaOut}
-              placeholder='exclude by url'
+              placeholder='exclude by url [use regex]'
               onChange={this.urlFilterOut}
               label={'filter-out by url'}
-              classStyle='d-inline-block'
+              classStyle={'d-inline-block ' + (this.validateRegEx(this.state.urlCriteriaOut) ? '' : 'error')}
           />
           {
             Object.keys(PATTERN_CRITERIA).map(c =>
@@ -111,7 +131,7 @@ class Dashboard extends Component {
                   name={c + '-toggler'}
                   initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA[c])}
                   onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA[c])}
-                  label={'hide "' + PATTERN_CRITERIA[c] + '" urls'}
+                  label={'hide ' + PATTERN_CRITERIA[c] + ' urls'}
                   classStyle='d-inline-block'
               />
             )

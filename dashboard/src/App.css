@@ -118,6 +118,9 @@ table tr:hover td {
 .form-field-wrapper input:focus {
   border: 1px solid #abc;
 }
+.form-field-wrapper.error input {
+  border-color: #f30;
+}
 
 .d-inline-block {
   display: inline-block;
