@@ -10,7 +10,7 @@ const PATTERN_CRITERIA = {
 
 function toggleElementFromArray(element, array) {
   if (array.includes(element)) {
-    array = array.filter(e => e!= element);
+    array = array.filter(e => e !== element);
   }
   else {
     array = array.concat([element]);
@@ -128,6 +128,7 @@ class Dashboard extends Component {
           {
             Object.keys(PATTERN_CRITERIA).map(c =>
               <Toggle
+                  key={c + '-toggler'}
                   name={c + '-toggler'}
                   initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA[c])}
                   onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA[c])}

@@ -50,7 +50,7 @@ class Patterns extends Component {
               {
                 serverData ?
                   Object.keys(serverData).map((k, index) =>
-                        <tr className={index % 2 == 0 ? 'even-row' : 'odd-row'} key={k}>
+                        <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
                           <td>{k}</td>
                           <td className=''>
                             {
