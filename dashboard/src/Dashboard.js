@@ -25,7 +25,7 @@ class Dashboard extends Component {
       data: null,
       urlCriteria: '',
       urlCriteriaOut: '',
-      hiddenCriteria: [PATTERN_CRITERIA.download, PATTERN_CRITERIA.dwr, PATTERN_CRITERIA.api],
+      hiddenCriteria: Object.values(PATTERN_CRITERIA),
     };
 
     ['urlFilter', 'urlFilterOut']
@@ -105,27 +105,17 @@ class Dashboard extends Component {
               label={'filter-out by url'}
               classStyle='d-inline-block'
           />
-          <Toggle
-              name='urlHideDownload'
-              initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA.download)}
-              onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA.download)}
-              label={'hide "' + PATTERN_CRITERIA.download + '" urls'}
-              classStyle='d-inline-block'
-          />
-          <Toggle
-              name='urlHideDwr'
-              initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA.dwr)}
-              onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA.dwr)}
-              label={'hide "' + PATTERN_CRITERIA.dwr + '" urls'}
-              classStyle='d-inline-block'
-          />
-          <Toggle
-              name='urlHideApi'
-              initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA.api)}
-              onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA.api)}
-              label={'hide "' + PATTERN_CRITERIA.api + '" urls'}
-              classStyle='d-inline-block'
-          />
+          {
+            Object.keys(PATTERN_CRITERIA).map(c =>
+              <Toggle
+                  name={c + '-toggler'}
+                  initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA[c])}
+                  onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA[c])}
+                  label={'hide "' + PATTERN_CRITERIA[c] + '" urls'}
+                  classStyle='d-inline-block'
+              />
+            )
+          }
         </aside>
         <section>
           <table>
