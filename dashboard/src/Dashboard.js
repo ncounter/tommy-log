@@ -111,18 +111,18 @@ class Dashboard extends Component {
               type='text'
               name='urlCriteria'
               initialValue={this.state.urlCriteria}
-              placeholder='keep-in by url [use regex]'
+              placeholder='[use regex]'
               onChange={this.urlFilter}
-              label={'filter-in by url'}
+              label={'Filter-in by url'}
               classStyle={'d-inline-block ' + (this.validateRegEx(this.state.urlCriteria) ? '' : 'error')}
           />
           <TextInput
               type='text'
               name='urlCriteriaOut'
               initialValue={this.state.urlCriteriaOut}
-              placeholder='exclude by url [use regex]'
+              placeholder='[use regex]'
               onChange={this.urlFilterOut}
-              label={'filter-out by url'}
+              label={'Filter-out by url'}
               classStyle={'d-inline-block ' + (this.validateRegEx(this.state.urlCriteriaOut) ? '' : 'error')}
           />
           {
@@ -131,7 +131,7 @@ class Dashboard extends Component {
                   name={c + '-toggler'}
                   initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA[c])}
                   onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA[c])}
-                  label={'hide ' + PATTERN_CRITERIA[c] + ' urls'}
+                  label={'Hide ' + PATTERN_CRITERIA[c] + ' urls'}
                   classStyle='d-inline-block'
               />
             )
@@ -145,8 +145,8 @@ class Dashboard extends Component {
             </colgroup>
             <thead>
               <tr>
-                <th>url [{data.length}]</th>
-                <th className="center">count</th>
+                <th>Url [{data.length}]</th>
+                <th className="center">Count</th>
               </tr>
             </thead>
             <tbody>
