@@ -2,6 +2,22 @@ import React, { Component } from 'react';
 import Loading from './Loading';
 import { TextInput, Toggle } from './Fields';
 
+const PATTERN_CRITERIA = {
+  download : '/rhn/manager/download/',
+  dwr : '/rhn/dwr/',
+  api: '/rhn/manager/api/'
+}
+
+function toggleElementFromArray(element, array) {
+  if (array.includes(element)) {
+    array = array.filter(e => e!= element);
+  }
+  else {
+    array = array.concat([element]);
+  }
+  return array;
+}
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -9,8 +25,7 @@ class Dashboard extends Component {
       data: null,
       urlCriteria: '',
       urlCriteriaOut: '',
-      urlHideDownload: true,
-      urlHideDwr: true
+      hiddenCriteria: [PATTERN_CRITERIA.download, PATTERN_CRITERIA.dwr, PATTERN_CRITERIA.api],
     };
 
     ['urlFilter', 'urlFilterOut']
@@ -40,12 +55,8 @@ class Dashboard extends Component {
     this.setState({ urlCriteriaOut: criteria });
   }
 
-  urlHideDownload(isActive) {
-    this.setState({ urlHideDownload: isActive });
-  }
-
-  urlHideDwr(isActive) {
-    this.setState({ urlHideDwr: isActive });
+  toggleHiddenCriteria(criteria) {
+    this.setState({ hiddenCriteria: toggleElementFromArray(criteria, this.state.hiddenCriteria) });
   }
 
   filterData() {
@@ -56,12 +67,9 @@ class Dashboard extends Component {
     if (this.state.urlCriteriaOut.length > 0) {
       data = data.filter(d => !d.includes(this.state.urlCriteriaOut));
     }
-    if (this.state.urlHideDownload) {
-      data = data.filter(d => !d.includes('/rhn/manager/download/'));
-    }
-    if (this.state.urlHideDwr) {
-      data = data.filter(d => !d.includes('/rhn/dwr/'));
-    }
+
+    this.state.hiddenCriteria.forEach(c => data = data.filter(d => !d.includes(c)));
+
     return data;
   }
 
@@ -99,16 +107,23 @@ class Dashboard extends Component {
           />
           <Toggle
               name='urlHideDownload'
-              initialValue={this.state.urlHideDownload}
-              onChange={(isChecked) => this.urlHideDownload(isChecked)}
-              label={'hide \'/rhn/manager/download/\' urls'}
+              initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA.download)}
+              onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA.download)}
+              label={'hide "' + PATTERN_CRITERIA.download + '" urls'}
               classStyle='d-inline-block'
           />
           <Toggle
               name='urlHideDwr'
-              initialValue={this.state.urlHideDwr}
-              onChange={(isChecked) => this.urlHideDwr(isChecked)}
-              label={'hide \'/rhn/dwr/\' download'}
+              initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA.dwr)}
+              onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA.dwr)}
+              label={'hide "' + PATTERN_CRITERIA.dwr + '" urls'}
+              classStyle='d-inline-block'
+          />
+          <Toggle
+              name='urlHideApi'
+              initialValue={this.state.hiddenCriteria.includes(PATTERN_CRITERIA.api)}
+              onChange={() => this.toggleHiddenCriteria(PATTERN_CRITERIA.api)}
+              label={'hide "' + PATTERN_CRITERIA.api + '" urls'}
               classStyle='d-inline-block'
           />
         </aside>
