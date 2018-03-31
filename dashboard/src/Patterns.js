@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import Loading from './Loading';
+import Pagination from './Pagination';
 
 class Patterns extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null
+      data: null,
+      currentPage: 1,
+      itemsPerPage: 10
     };
 
-    []
+    ['changePage', 'changeItemsPerPage']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -27,8 +30,35 @@ class Patterns extends Component {
     .catch(err => { throw err });
   }
 
+  changePage(page) {
+    this.setState({currentPage : page})
+  }
+
+  changeItemsPerPage(itemsPerPage) {
+    this.setState({itemsPerPage: itemsPerPage});
+  }
+
+  filterData(data) {
+    return data;
+  }
+
+  paginatedData(data) {
+    return data.slice((this.state.currentPage - 1) * this.state.itemsPerPage, this.state.currentPage * this.state.itemsPerPage)
+  }
+
+  normalizedData() {
+    const keys = Object.keys(this.state.data);
+    return this.filterData(keys);
+  }
+
   render() {
     const serverData = this.state.data;
+    let data = [];
+    let dataLength = 0;
+    if (serverData) {
+      data = this.normalizedData();
+      dataLength = data.length;
+    }
     return (
       <div className="patterns">
         <aside>
@@ -49,7 +79,7 @@ class Patterns extends Component {
             <tbody>
               {
                 serverData ?
-                  Object.keys(serverData).map((k, index) =>
+                  this.paginatedData(data).map((k, index) =>
                         <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
                           <td>{k}</td>
                           <td className=''>
@@ -71,8 +101,15 @@ class Patterns extends Component {
             </tbody>
             <tfoot>
               <tr>
-                <td></td>
-                <td></td>
+                <td colSpan={2}>
+                  <Pagination
+                      dataLength={dataLength}
+                      currentPage={this.state.currentPage}
+                      itemsPerPage={this.state.itemsPerPage}
+                      onChangePage={this.changePage}
+                      onChangeItemsPerPage={this.changeItemsPerPage}
+                  />
+                </td>
               </tr>
             </tfoot>
           </table>

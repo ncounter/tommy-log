@@ -163,7 +163,7 @@ class Stats extends Component {
             </colgroup>
             <thead>
               <tr>
-                <th>Url [{data.length}]</th>
+                <th>Url</th>
                 <th className="center">Count</th>
               </tr>
             </thead>
