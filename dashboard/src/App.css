@@ -50,7 +50,7 @@ aside h3 {
   background-color: #fec;
 }
 
-.dashboard {
+.stats, .patterns {
   margin: auto;
   padding: 1em;
 }

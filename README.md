@@ -1,5 +1,5 @@
 # logorator
-A log grinder to extract statistics
+A log grinder to extract statistics and more
 
 1. a backend python log grinder to analyze, extract and compute information
 2. a web dashboard to view results from the backend analysis
@@ -17,6 +17,9 @@ The generated output that will look like:
   ...
 }
 ```
+## WIP
+Decode most frequent patterns of a typical workflow storing a pair of *from-to* url page.
+
 
 # How to use
 
@@ -51,6 +54,10 @@ less ./dashboard/public/stats.json
 ```
 
 ## Dashboard web page
+
+Available pages:
+- Stats
+- Patterns [wip]
 
 ### Requirements
 

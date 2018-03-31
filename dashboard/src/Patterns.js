@@ -30,7 +30,7 @@ class Patterns extends Component {
   render() {
     const serverData = this.state.data;
     return (
-      <div className="dashboard">
+      <div className="patterns">
         <aside>
           <h3>Filters</h3>
         </aside>

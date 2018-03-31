@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Dashboard from './Dashboard';
+import Stats from './Stats';
 import Patterns from './Patterns';
 
 class App extends Component {
@@ -8,7 +8,7 @@ class App extends Component {
     super(props);
     this.state = {
       title: 'App',
-      page: '#Dashboard'
+      page: '#Stats'
     }
   }
 
@@ -37,12 +37,12 @@ class App extends Component {
           <h3>{this.state.title}</h3>
         </header>
         <div className='tabs-wrapper'>
-          <a className={'tab ' + (this.state.page === '#Dashboard' ? 'active' : '')} href="#Dashboard" onClick={() => this.currentPage('#Dashboard')}>Dashboard</a>
+          <a className={'tab ' + (this.state.page === '#Stats' ? 'active' : '')} href="#Stats" onClick={() => this.currentPage('#Stats')}>Stats</a>
           <a className={'tab ' + (this.state.page === '#Patterns' ? 'active' : '')} href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Patterns</a>
         </div>
         {
-          this.state.page === '#Dashboard' ?
-            <Dashboard setTitle={(title) => this.setTitle(title)} />
+          this.state.page === '#Stats' ?
+            <Stats setTitle={(title) => this.setTitle(title)} />
             : <Patterns setTitle={(title) => this.setTitle(title)} />
         }
       </div>

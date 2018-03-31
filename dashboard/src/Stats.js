@@ -19,7 +19,7 @@ function toggleElementFromArray(element, array) {
   return array;
 }
 
-class Dashboard extends Component {
+class Stats extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -121,7 +121,7 @@ class Dashboard extends Component {
       dataLength = data.length;
     }
     return (
-      <div className="dashboard">
+      <div className="stats">
         <aside>
           <h3>Filters</h3>
           <TextInput
@@ -205,4 +205,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default Stats;
