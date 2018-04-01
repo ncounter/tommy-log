@@ -49,9 +49,13 @@ class Pagination extends Component {
           &nbsp;
           <div className="d-inline-block button-group">
             <button disabled={this.props.currentPage > 1 ? '' : 'disabled'}
+                onClick={() => this.props.onChangePage(parseInt(1, 10))}>First</button>
+            <button disabled={this.props.currentPage > 1 ? '' : 'disabled'}
                 onClick={() => this.props.onChangePage(parseInt(this.props.currentPage - 1, 10))}>Prev</button>
             <button disabled={this.props.currentPage < lastPage ? '' : 'disabled'}
                 onClick={() => this.props.onChangePage(parseInt(this.props.currentPage + 1, 10))}>Next</button>
+            <button disabled={this.props.currentPage < lastPage ? '' : 'disabled'}
+                onClick={() => this.props.onChangePage(parseInt(lastPage, 10))}>Last</button>
           </div>
         </div>
       </div>
