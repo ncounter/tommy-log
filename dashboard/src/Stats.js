@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Loading from './Loading';
 import { TextInput, Toggle } from './Fields';
-import Pagination from './Pagination';
+import { Table, Col } from './Table';
 
 const PATTERN_CRITERIA = {
   download : /.*(download).*/i,
@@ -27,11 +26,10 @@ class Stats extends Component {
       urlCriteria: '',
       urlCriteriaOut: '',
       hiddenCriteria: Object.values(PATTERN_CRITERIA),
-      currentPage: 1,
-      itemsPerPage: 10
+      isLoading: false
     };
 
-    ['urlFilter', 'urlFilterOut', 'changePage', 'changeItemsPerPage']
+    ['normalizedData', 'urlFilter', 'urlFilterOut']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -42,10 +40,11 @@ class Stats extends Component {
   componentDidMount() {
     let url = 'stats.json';
 
+    this.setState({isLoading: true});
     fetch(url)
     .then(res => res.json())
     .then((jsonData) => {
-      this.setState({ data: jsonData });
+      this.setState({ data: jsonData, isLoading: false });
     })
     .catch(err => { throw err });
   }
@@ -60,19 +59,6 @@ class Stats extends Component {
 
   toggleHiddenCriteria(criteria) {
     this.setState({ hiddenCriteria: toggleElementFromArray(criteria, this.state.hiddenCriteria) });
-  }
-
-  changePage(page) {
-    this.setState({currentPage : page})
-  }
-
-  changeItemsPerPage(itemsPerPage) {
-    var newCurrentPage = this.state.currentPage;
-    const newLastPage = Math.ceil(this.normalizedData().length / itemsPerPage);
-    if (newLastPage < newCurrentPage) {
-      newCurrentPage = newLastPage;
-    }
-    this.setState({itemsPerPage: itemsPerPage, currentPage: newCurrentPage});
   }
 
   validateRegEx(exp) {
@@ -108,21 +94,15 @@ class Stats extends Component {
     return data;
   }
 
-  paginatedData(data) {
-    return data.slice((this.state.currentPage - 1) * this.state.itemsPerPage, this.state.currentPage * this.state.itemsPerPage)
-  }
-
   normalizedData() {
-    const keys = Object.keys(this.state.data);
-    return this.filterData(keys);
+    if (this.state.data) {
+      const keys = Object.keys(this.state.data);
+      return this.filterData(keys);
+    }
+    return []
   }
 
   render() {
-    const serverData = this.state.data;
-    let data = [];
-    if (serverData) {
-      data = this.normalizedData();
-    }
     return (
       <div className="stats">
         <aside>
@@ -159,49 +139,14 @@ class Stats extends Component {
           }
         </aside>
         <section>
-          <table>
-            <colgroup>
-              <col width="85%"/>
-              <col width="15%"/>
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Url</th>
-                <th className="center">Count</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                serverData ?
-                  this.paginatedData(data.sort((j, k) => !(serverData[j] > serverData[k])))
-                      .map((k, index) =>
-                        <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
-                          <td>{k}</td>
-                          <td className='center'>{serverData[k]}</td>
-                        </tr>
-                      )
-                  :
-                  <tr>
-                    <td colSpan="2">
-                      <Loading altText='loading...' />
-                    </td>
-                  </tr>
-              }
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colSpan={2}>
-                  <Pagination
-                      dataLength={data.length}
-                      currentPage={this.state.currentPage}
-                      itemsPerPage={this.state.itemsPerPage}
-                      onChangePage={this.changePage}
-                      onChangeItemsPerPage={this.changeItemsPerPage}
-                  />
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          <Table
+              keys={this.normalizedData()}
+              rawMap={this.state.data}
+              loading={this.state.isLoading}
+          >
+            <Col data={(datum, key) => key} width='65%' />
+            <Col data={(datum, key) => datum[key]} className='center' width='35%' />
+          </Table>
         </section>
       </div>
     );
