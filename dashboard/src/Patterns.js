@@ -35,7 +35,12 @@ class Patterns extends Component {
   }
 
   changeItemsPerPage(itemsPerPage) {
-    this.setState({itemsPerPage: itemsPerPage});
+    var newCurrentPage = this.state.currentPage;
+    const newLastPage = Math.ceil(this.normalizedData().length / itemsPerPage);
+    if (newLastPage < newCurrentPage) {
+      newCurrentPage = newLastPage;
+    }
+    this.setState({itemsPerPage: itemsPerPage, currentPage: newCurrentPage});
   }
 
   filterData(data) {
@@ -54,10 +59,8 @@ class Patterns extends Component {
   render() {
     const serverData = this.state.data;
     let data = [];
-    let dataLength = 0;
     if (serverData) {
       data = this.normalizedData();
-      dataLength = data.length;
     }
     return (
       <div className="patterns">
@@ -103,7 +106,7 @@ class Patterns extends Component {
               <tr>
                 <td colSpan={2}>
                   <Pagination
-                      dataLength={dataLength}
+                      dataLength={data.length}
                       currentPage={this.state.currentPage}
                       itemsPerPage={this.state.itemsPerPage}
                       onChangePage={this.changePage}

@@ -10,7 +10,9 @@ class Pagination extends Component {
     return (
       <div className="pagination">
         <div className="d-inline-block text-left" style={{width: '50%'}}>
-          <select name="itemsPerPage" onChange={(e) => this.props.onChangeItemsPerPage(parseInt(e.target.value, 10))} value={this.props.itemsPerPage}>
+          <select name="itemsPerPage"
+              onChange={(e) => this.props.onChangeItemsPerPage(parseInt(e.target.value, 10))}
+              value={this.props.itemsPerPage}>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="15">15</option>
@@ -34,12 +36,13 @@ class Pagination extends Component {
           }
           &nbsp;[of&nbsp;{this.props.dataLength}&nbsp;items]
         </div>
-
         <div className="d-inline-block text-right" style={{width: '50%'}}>
           <span>page&nbsp;
             {
               lastPage > 1 ?
-                <select onChange={(e) => this.props.onChangePage(parseInt(e.target.value, 10))} value={this.props.currentPage}>
+                <select
+                    onChange={(e) => this.props.onChangePage(parseInt(e.target.value, 10))}
+                    value={this.props.currentPage}>
                   {arrPages.map(p => <option key={'page-' + p} value={p}>{p}</option>)}
                 </select>
                 : lastPage
