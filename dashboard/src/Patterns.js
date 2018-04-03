@@ -52,9 +52,28 @@ class Patterns extends Component {
               keys={this.normalizedData()}
               rawMap={this.state.data}
               loading={this.state.isLoading}
+              headers={[
+                <th key="th-ip">IP</th>,
+                <th key="th-fromto">Pattern</th>,
+              ]}
           >
-            <Col data={(datum, key) => key} width='65%' />
-            <Col data={(datum, key) => Object.keys(datum[key]).map(t => <div key={t}>{t} - {datum[key][t]}</div>)} width='35%' />
+            <Col data={(datum, key) => key} width='20%' />
+            <Col
+                // {ip:{fromUrl:{toUrl:X}}}
+                data={(datum, key) =>
+                    Object.keys(datum[key]) // {fromUrl:{toUrl:X}}
+                        .map(fromUrl =>
+                          Object.keys(datum[key][fromUrl]) // {toUrl:X}
+                              .map(toUrl =>
+                                  <div key={key + '-' + fromUrl + '-' + toUrl}>
+                                    {fromUrl} --> {toUrl} [{datum[key][fromUrl][toUrl]}]
+                                    <hr/>
+                                  </div>
+                              )
+                        )
+                }
+                width='80%'
+            />
           </Table>
         </section>
       </div>

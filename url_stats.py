@@ -45,6 +45,19 @@ def manipulate_source_line(source_line):
 
     return new_line.strip()
 
+# Extract the ip pattern from a log line
+#
+# 127.0.0.1 - - [19/Oct/2017:11:00:16 +0200] "POST /rhn/rpc/api HTTP/1.1" 200 334
+def extract_ip_from_string(source_line):
+    new_ip = source_line
+
+    pattern = re.compile(r'([0-9]{1,3}\.){3}([0-9]{1,3})', re.MULTILINE|re.IGNORECASE)
+    new_pattern_result = pattern.search(new_ip)
+    if new_pattern_result != None:
+        new_ip = new_pattern_result.group(0)
+
+    return new_ip
+
 # print to standard output the EndOfLine character multiple times
 def print_eol(time = 1):
     for t in range(0,time):
@@ -94,25 +107,35 @@ def main():
    for source_file_name in source_file_list:
       with open(source_path + source_file_name, 'r') as current_file:
          prev_url = None
+         prev_ip = None
          for line in tuple(current_file):
             # extract the url from the log line
+            current_ip = extract_ip_from_string(line)
             current_url = manipulate_source_line(line)
+
             # keep a distinct list as an index
             distinct_url_set.add(current_url)
             # add the url found into the urls bunch
             duplicated_url_list.append(current_url)
 
-            # map the pattern flow {fromUrl:{toUrl:count}}
-            if prev_url is not None:
-                if prev_url in pattern_map:
-                    to_url_map = pattern_map[prev_url]
-                    if current_url in to_url_map:
-                        to_url_map[current_url] = to_url_map[current_url] + 1
-                    else:
-                        to_url_map[current_url] = 1
+            # map the pattern flow {ip:{fromUrl:{toUrl:count}}}
+            if current_ip is not None:
+                if current_ip in pattern_map:
+                    ip_map = pattern_map[current_ip]
+                    if prev_url is not None:
+                        if prev_url in ip_map:
+                            to_url_map = ip_map[prev_url]
+                            if current_url in to_url_map:
+                                to_url_map[current_url] = to_url_map[current_url] + 1
+                            else:
+                                to_url_map[current_url] = 1
+                        else:
+                            ip_map[prev_url] = {current_url:1}
                 else:
-                    pattern_map[prev_url] = {current_url:1}
+                    pattern_map[current_ip] = {current_url:{}}
+
             prev_url = current_url
+
          current_file.close()
 
    for url in distinct_url_set:

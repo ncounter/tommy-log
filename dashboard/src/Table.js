@@ -49,8 +49,9 @@ export class Table extends Component {
         </colgroup>
         <thead>
           <tr>
-            <th>Url</th>
-            <th className="center">Count</th>
+            {
+              this.props.headers.map(h => h)
+            }
           </tr>
         </thead>
         <tbody>
@@ -70,7 +71,7 @@ export class Table extends Component {
                   )
               :
               <tr>
-                <td colSpan="2">
+                <td colSpan={this.props.headers.length}>
                   <Loading altText='loading...' />
                 </td>
               </tr>
@@ -78,7 +79,7 @@ export class Table extends Component {
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={2}>
+            <td colSpan={this.props.headers.length}>
               <Pagination
                   dataLength={this.props.keys.length}
                   currentPage={this.state.currentPage}

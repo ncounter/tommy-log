@@ -143,6 +143,10 @@ class Stats extends Component {
               keys={this.normalizedData()}
               rawMap={this.state.data}
               loading={this.state.isLoading}
+              headers={[
+                <th key="th-url">Url</th>,
+                <th key="th-count" className="center">Count</th>
+              ]}
           >
             <Col data={(datum, key) => key} width='65%' />
             <Col data={(datum, key) => datum[key]} className='center' width='35%' />
