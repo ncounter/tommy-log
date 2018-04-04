@@ -131,7 +131,7 @@ def main():
    sys.stdout.write('\n')
 
    pattern_file.close()
-   sys.stdout.writelines(['A new stats file has been generated in `', os.path.abspath(pattern_file.name), '`'])
+   sys.stdout.writelines(['A new pattern file has been generated in `', os.path.abspath(pattern_file.name), '`'])
    sys.stdout.write('\n')
 
 if __name__ == "__main__":
