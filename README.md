@@ -39,7 +39,7 @@ tomcat_log_path=<TOMCAT_LOGS_PATH>
 stats_file=./dashboard/public/stats.json
 pattern_file=./dashboard/public/patterns.json
 ```
-Be aware that changing the `stats_file` parameter will make the **dashboard** web page unable to load data, please make sure you will update the [json source file for Stats](https://github.com/ncounter/logorator/blob/master/dashboard/scr/Stats.js) and [json source file for Patterns](https://github.com/ncounter/logorator/blob/master/dashboard/scr/Patterns.js) accordingly.
+Be aware that changing the `stats_file` parameter will make the **dashboard** web page unable to load data, please make sure you will update the [json source file for Stats](https://github.com/ncounter/logorator/tree/master/dashboard/src/Stats.js) and [json source file for Patterns](https://github.com/ncounter/logorator/tree/master/dashboard/src/Patterns.js) accordingly.
 
 
 ## Python analyzer
