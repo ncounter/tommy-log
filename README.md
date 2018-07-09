@@ -45,15 +45,23 @@ Be aware that changing the `stats_file` parameter will make the **dashboard** we
 ## Python analyzer
 
 ### Important
-The `url_stats.py` program makes an assumption about your [log format](https://github.com/ncounter/logorator/blob/master/url_stats.py#L13) expecting log lines with **the request** information containing the **url** wrapped between `""`, something like the following for instance:
+The `count_urls.py` program makes an assumption about your [log format](https://github.com/ncounter/logorator/blob/master/count_urls.py#L13) expecting log lines with **the request** information containing the **url** wrapped between `""`, something like the following for instance:
 
 `192.168.1.101 - - [19/Oct/2017:11:00:16 +0200] "POST /my/url/path HTTP/1.1" 200 334`
 
 ### Running
+
+#### Count URLs
 ```
 cd logorator
-python url_stats.py
+python backend/count_urls.py
 less ./dashboard/public/stats.json
+```
+#### Elaborate Patterns
+```
+cd logorator
+python backend/elaborate_patterns.py
+less ./dashboard/public/patterns.json
 ```
 
 ## Dashboard web page
