@@ -42,8 +42,8 @@ def main():
          prev_ip = None
          for line in tuple(current_file):
             # extract the url from the log line
-            current_ip = utils.extract_ip_from_string(line)
-            current_url = utils.manipulate_source_line(line)
+            current_ip = utils.extract_ip_from(line)
+            current_url = utils.extract_url_from(line)
 
             # map the pattern flow {ip:{fromUrl:{toUrl:count}}}
             if current_ip is not None:

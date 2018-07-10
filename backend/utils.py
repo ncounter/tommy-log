@@ -23,7 +23,7 @@ def write_line(f, s):
 # %b - Bytes sent, excluding HTTP headers, or '-' if no bytes were sent
 #
 # 127.0.0.1 - - [19/Oct/2017:11:00:16 +0200] "POST /rhn/rpc/api HTTP/1.1" 200 334
-def manipulate_source_line(source_line):
+def extract_url_from(source_line):
     new_line = source_line
 
     # save line request only, getting rid of %h %l %u %t %s and %b
@@ -48,7 +48,7 @@ def manipulate_source_line(source_line):
 # Extract the ip pattern from a log line
 #
 # 127.0.0.1 - - [19/Oct/2017:11:00:16 +0200] "POST /rhn/rpc/api HTTP/1.1" 200 334
-def extract_ip_from_string(source_line):
+def extract_ip_from(source_line):
     new_ip = source_line
 
     pattern = re.compile(r'([0-9]{1,3}\.){3}([0-9]{1,3})', re.MULTILINE|re.IGNORECASE)

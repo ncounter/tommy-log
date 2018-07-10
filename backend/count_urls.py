@@ -42,7 +42,7 @@ def main():
       with open(source_path + source_file_name, 'r') as current_file:
          for line in tuple(current_file):
             # extract the url from the log line
-            current_url = utils.manipulate_source_line(line)
+            current_url = utils.extract_url_from(line)
 
             # keep a distinct list as an index
             distinct_url_set.add(current_url)
