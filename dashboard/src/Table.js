@@ -57,18 +57,25 @@ export class Table extends Component {
         <tbody>
           {
             !this.props.loading ?
-              this.paginatedData(this.props.keys.sort((j, k) => !(this.props.rawMap[j] > this.props.rawMap[k])))
-                  .map((k, index) =>
-                    <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
-                      {
-                        this.props.children.map((c, i) =>
-                          <Col key={c + i} className={c.props.className}
-                            data={c.props.data(this.props.rawMap, k)}
-                          />
-                        )
-                      }
-                    </tr>
-                  )
+              this.props.keys.length > 0 ?
+                this.paginatedData(this.props.keys.sort((j, k) => !(this.props.rawMap[j] > this.props.rawMap[k])))
+                    .map((k, index) =>
+                      <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
+                        {
+                          this.props.children.map((c, i) =>
+                            <Col key={c + i} className={c.props.className}
+                              data={c.props.data(this.props.rawMap, k)}
+                            />
+                          )
+                        }
+                      </tr>
+                    )
+                :
+                <tr>
+                  <td colSpan={this.props.headers.length}>
+                    <span>No data available</span>
+                  </td>
+                </tr>
               :
               <tr>
                 <td colSpan={this.props.headers.length}>
