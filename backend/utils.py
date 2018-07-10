@@ -58,6 +58,20 @@ def extract_ip_from(source_line):
 
     return new_ip
 
+
+# Extract the datetime pattern from a log line
+#
+# 127.0.0.1 - - [19/Oct/2017:11:00:16 +0200] "POST /rhn/rpc/api HTTP/1.1" 200 334
+def extract_datetime_from(source_line):
+    new_datetime = source_line
+
+    pattern = re.compile(r'\[[012][0-9]/[A-Z][a-z]{2}/[0-9]{4}:[012][0-9]:[012345][0-9]:[012345][0-9] \+[0-9]{4}\]', re.MULTILINE|re.IGNORECASE)
+    new_pattern_result = pattern.search(new_datetime)
+    if new_pattern_result != None:
+        new_datetime = new_pattern_result.group(0)
+
+    return new_datetime
+
 # print to standard output the EndOfLine character multiple times
 def print_eol(time = 1):
     for t in range(0,time):
