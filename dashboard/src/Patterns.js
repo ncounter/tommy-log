@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Col } from './Table';
+import Utils from './Utils';
 
 class Patterns extends Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class Patterns extends Component {
       isLoading: false
     };
 
-    []
+    ['filterData']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -21,6 +22,12 @@ class Patterns extends Component {
     let url = 'patterns.json';
 
     this.setState({isLoading: true});
+
+    if(!Utils.linkCheck(url)) {
+      this.setState({ data: {}, isLoading : false });
+      return;
+    }
+
     fetch(url)
     .then(res => res.json())
     .then((jsonData) => {
@@ -33,14 +40,6 @@ class Patterns extends Component {
     return data;
   }
 
-  normalizedData() {
-    if (this.state.data) {
-      const keys = Object.keys(this.state.data);
-      return this.filterData(keys);
-    }
-    return []
-  }
-
   render() {
     return (
       <div className="patterns">
@@ -49,7 +48,7 @@ class Patterns extends Component {
         </aside>
         <section>
           <Table
-              keys={this.normalizedData()}
+              keys={Utils.normalizeData(this.state.data, this.filterData)}
               rawMap={this.state.data}
               loading={this.state.isLoading}
               headers={[

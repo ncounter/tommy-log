@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
 import { TextInput, Toggle } from './Fields';
 import { Table, Col } from './Table';
+import Utils from './Utils';
 
 const PATTERN_CRITERIA = {
   download : /.*(download).*/i,
   dwr : /.*(dwr).*/i,
   api: /.*(rpc\/api).*/i
-}
-
-function toggleElementFromArray(element, array) {
-  if (array.includes(element)) {
-    array = array.filter(e => e !== element);
-  }
-  else {
-    array = array.concat([element]);
-  }
-  return array;
 }
 
 class Stats extends Component {
@@ -29,7 +20,7 @@ class Stats extends Component {
       isLoading: false
     };
 
-    ['normalizedData', 'urlFilter', 'urlFilterOut']
+    ['urlFilter', 'urlFilterOut', 'filterData']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -41,6 +32,12 @@ class Stats extends Component {
     let url = 'stats.json';
 
     this.setState({isLoading: true});
+
+    if(!Utils.linkCheck(url)) {
+      this.setState({ data: {}, isLoading : false });
+      return;
+    }
+
     fetch(url)
     .then(res => res.json())
     .then((jsonData) => {
@@ -58,17 +55,7 @@ class Stats extends Component {
   }
 
   toggleHiddenCriteria(criteria) {
-    this.setState({ hiddenCriteria: toggleElementFromArray(criteria, this.state.hiddenCriteria) });
-  }
-
-  validateRegEx(exp) {
-    try {
-      ''.match(exp);
-    }
-    catch (Exception){
-      return false;
-    }
-    return true;
+    this.setState({ hiddenCriteria: Utils.toggleElementFromArray(criteria, this.state.hiddenCriteria) });
   }
 
   filterData(data) {
@@ -94,14 +81,6 @@ class Stats extends Component {
     return data;
   }
 
-  normalizedData() {
-    if (this.state.data) {
-      const keys = Object.keys(this.state.data);
-      return this.filterData(keys);
-    }
-    return []
-  }
-
   render() {
     return (
       <div className="stats">
@@ -114,7 +93,7 @@ class Stats extends Component {
               placeholder='[use regex]'
               onChange={this.urlFilter}
               label={'Filter-in by url'}
-              classStyle={'d-inline-block ' + (this.validateRegEx(this.state.urlCriteria) ? '' : 'error')}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.urlCriteria) ? '' : 'error')}
           />
           <TextInput
               type='text'
@@ -123,7 +102,7 @@ class Stats extends Component {
               placeholder='[use regex]'
               onChange={this.urlFilterOut}
               label={'Filter-out by url'}
-              classStyle={'d-inline-block ' + (this.validateRegEx(this.state.urlCriteriaOut) ? '' : 'error')}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.urlCriteriaOut) ? '' : 'error')}
           />
           {
             Object.keys(PATTERN_CRITERIA).map(c =>
@@ -140,7 +119,7 @@ class Stats extends Component {
         </aside>
         <section>
           <Table
-              keys={this.normalizedData()}
+              keys={Utils.normalizeData(this.state.data, this.filterData)}
               rawMap={this.state.data}
               loading={this.state.isLoading}
               headers={[
