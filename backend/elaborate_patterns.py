@@ -2,6 +2,7 @@
 
 import numpy as np
 import sys, os, re, ConfigParser, json
+from datetime import datetime
 import utils
 
 CONFIG_KEY_NAME = 'logorator'
@@ -33,40 +34,56 @@ def main():
    if os.path.exists(pattern_file_name): os.remove(pattern_file_name)
    pattern_file = open(pattern_file_name , 'w+')
 
-   # create a map of { unique_url : occurrence_count }
-   pattern_map = {}
+   # create a map of shaped object like {ip : {url, datetime}}
+   sequence_map = {}
 
    for source_file_name in source_file_list:
       with open(source_path + source_file_name, 'r') as current_file:
-         prev_url = None
-         prev_ip = None
          for line in tuple(current_file):
-            # extract the url from the log line
-            current_ip = utils.extract_ip_from(line)
-            current_url = utils.extract_url_from(line)
+            # extract the values from the log line
+            ip = utils.extract_ip_from(line)
+            url = utils.extract_url_from(line)
+            datetime = utils.extract_datetime_from(line)
 
-            # map the pattern flow {ip:{fromUrl:{toUrl:count}}}
-            if current_ip is not None:
-                if current_ip in pattern_map:
-                    ip_map = pattern_map[current_ip]
-                    if prev_url is not None:
-                        if prev_url in ip_map:
-                            to_url_map = ip_map[prev_url]
-                            if current_url in to_url_map:
-                                to_url_map[current_url] = to_url_map[current_url] + 1
-                            else:
-                                to_url_map[current_url] = 1
-                        else:
-                            ip_map[prev_url] = {current_url:1}
-                else:
-                    pattern_map[current_ip] = {current_url:{}}
-
-            prev_url = current_url
+            obj = {}
+            obj['url'] = url
+            obj['datetime'] = datetime.strftime('%Y-%m-%d %H:%M:%S')
+            if ip in sequence_map.keys():
+               existing_values = list()
+               existing_values.extend(sequence_map[ip])
+               existing_values.append(obj)
+               sequence_map[ip] = existing_values
+            else:
+               sequence_map[ip] = [obj]
 
          current_file.close()
 
-   # write statistics into JSON format {ip:{fromUrl:{toUrl:count}}}
-   utils.write_line(pattern_file, json.dumps(pattern_map))
+   # list of couple of patterns [{from, to, count}]
+   patterns = []
+   # sequence of patterns has to be created by the same ip because it is a user workflow
+   for ip in sequence_map.keys():
+      sequence_list = list()
+      sequence_list.extend(sequence_map[ip])
+      for i in range(len(sequence_list) - 1):
+         current_item, next_item = sequence_list[i], sequence_list[i + 1]
+
+         # now we can ignore the user (ip) and start counting
+         # occurrencies of the same from-to pattern
+
+         # if added already, increase the counter
+         if any(x for x in patterns if x['from'] == current_item['url'] and x['to'] == next_item['url']):
+            existing_obj = next(x for x in patterns if x['from'] == current_item['url'] and x['to'] == next_item['url'])
+            existing_obj['count'] = existing_obj['count'] + 1
+         # else, add it with counter = 1
+         else:
+            pattern_obj = {}
+            pattern_obj['from'] = current_item['url']
+            pattern_obj['to'] = next_item['url']
+            pattern_obj['count'] = 1
+            patterns.append(pattern_obj)
+
+   # write statistics into JSON format
+   utils.write_line(pattern_file, json.dumps(patterns))
 
    pattern_file.close()
    sys.stdout.writelines(['A new pattern file has been generated in `', os.path.abspath(pattern_file.name), '`'])
