@@ -69,7 +69,7 @@ export class Table extends Component {
           {
             !this.props.loading ?
               this.props.keys.length > 0 ?
-                this.paginatedData(this.props.keys.sort((j, k) => !(this.props.rawMap[j] > this.props.rawMap[k])))
+                this.paginatedData(this.props.sort(this.props.keys, this.props.rawMap))
                     .map((k, index) =>
                       <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
                         {

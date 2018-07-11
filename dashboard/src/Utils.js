@@ -15,10 +15,16 @@ function validateRegEx(exp) {
   return true;
 }
 
-function normalizeData(data, filter) {
+function getKeys(data) {
   if (data) {
-    const keys = Object.keys(data);
-    return filter(keys);
+    return Object.keys(data);
+  }
+  return []
+}
+
+function normalizeDataByKeys(data, filter) {
+  if (data) {
+    return filter(getKeys(data));
   }
   return []
 }
@@ -36,6 +42,7 @@ function toggleElementFromArray(element, array) {
 module.exports = {
   linkCheck: linkCheck,
   validateRegEx: validateRegEx,
-  normalizeData: normalizeData,
+  normalizeDataByKeys: normalizeDataByKeys,
+  getKeys: getKeys,
   toggleElementFromArray
 }
