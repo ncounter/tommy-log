@@ -65,7 +65,7 @@ def extract_ip_from(source_line):
 def extract_datetime_from(source_line):
     new_datetime = source_line
 
-    pattern = re.compile(r'\[[0123][0-9]/[A-Z][a-z]{2}/[0-9]{4}:[012][0-9]:[012345][0-9]:[012345][0-9] \+[0-9]{4}\]', re.MULTILINE|re.IGNORECASE)
+    pattern = re.compile(r'[0123][0-9]/[A-Z][a-z]{2}/[0-9]{4}:[012][0-9]:[012345][0-9]:[012345][0-9] \+[0-9]{4}', re.MULTILINE|re.IGNORECASE)
     new_pattern_result = pattern.search(new_datetime)
     if new_pattern_result != None:
         new_datetime = new_pattern_result.group(0)
