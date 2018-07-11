@@ -58,8 +58,8 @@ def main():
 
          current_file.close()
 
-   # list of couple of patterns [{from, to, count}]
-   patterns = []
+   # list of couple of patterns {from --> to : count}
+   patterns = {}
    # sequence of patterns has to be created by the same ip because it is a user workflow
    for ip in sequence_map.keys():
       sequence_list = list()
@@ -67,20 +67,17 @@ def main():
       for i in range(len(sequence_list) - 1):
          current_item, next_item = sequence_list[i], sequence_list[i + 1]
 
+         # prepare the key for the map
+         key_item = current_item['url'] + ' --> ' + next_item['url']
+
          # now we can ignore the user (ip) and start counting
          # occurrencies of the same from-to pattern
 
-         # if added already, increase the counter
-         if any(x for x in patterns if x['from'] == current_item['url'] and x['to'] == next_item['url']):
-            existing_obj = next(x for x in patterns if x['from'] == current_item['url'] and x['to'] == next_item['url'])
-            existing_obj['count'] = existing_obj['count'] + 1
-         # else, add it with counter = 1
+         # increase the count if already added
+         if key_item in patterns.keys():
+            patterns[key_item] = patterns[key_item] + 1
          else:
-            pattern_obj = {}
-            pattern_obj['from'] = current_item['url']
-            pattern_obj['to'] = next_item['url']
-            pattern_obj['count'] = 1
-            patterns.append(pattern_obj)
+            patterns[key_item] = 1
 
    # write statistics into JSON format
    utils.write_line(pattern_file, json.dumps(patterns))

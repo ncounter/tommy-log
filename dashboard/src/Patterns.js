@@ -102,16 +102,8 @@ class Patterns extends Component {
                 <th key="th-count">Count</th>,
               ]}
           >
-            <Col
-                // {from, to, count}
-                data={(datum, key) =>
-                    <div key={key}>
-                      {datum[key].from} --> {datum[key].to}
-                    </div>
-                }
-                width='80%'
-            />
-            <Col data={(datum, key) => datum[key].count} width='20%' />
+            <Col data={(datum, key) => key} width='80%' />
+            <Col data={(datum, key) => datum[key]} className='center' width='20%' />
           </Table>
         </section>
       </div>
