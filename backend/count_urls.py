@@ -35,8 +35,6 @@ def main():
 
    # create a map of { unique_url : occurrence_count }
    stats_map = {}
-   distinct_url_set = set()
-   duplicated_url_list = []
 
    for source_file_name in source_file_list:
       with open(source_path + source_file_name, 'r') as current_file:
@@ -44,17 +42,15 @@ def main():
             # extract the url from the log line
             current_url = utils.extract_url_from(line)
 
-            # keep a distinct list as an index
-            distinct_url_set.add(current_url)
-            # add the url found into the urls bunch
-            duplicated_url_list.append(current_url)
+            # increase the count if already added
+            if current_url in stats_map:
+               stats_map[current_url] = stats_map[current_url] + 1
+            else:
+               stats_map[current_url] = 1
 
          current_file.close()
 
-   for url in distinct_url_set:
-      stats_map.update({url : duplicated_url_list.count(url)})
-
-   sys.stdout.writelines([str(len(distinct_url_set)), ' distinct URLs found..'])
+   sys.stdout.writelines([str(len(stats_map)), ' distinct URLs found..'])
    utils.print_separator()
 
    # write statistics into JSON format { unique_url : occurrence_count }
