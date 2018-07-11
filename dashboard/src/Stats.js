@@ -81,6 +81,10 @@ class Stats extends Component {
     return data;
   }
 
+  sort(keys, rawData) {
+    return keys.sort((j, k) => !(rawData[j] > rawData[k]))
+  }
+
   render() {
     return (
       <div className="stats">
@@ -119,8 +123,9 @@ class Stats extends Component {
         </aside>
         <section>
           <Table
-              keys={Utils.normalizeData(this.state.data, this.filterData)}
+              keys={Utils.normalizeDataByKeys(this.state.data, this.filterData)}
               rawMap={this.state.data}
+              sort={this.sort}
               loading={this.state.isLoading}
               headers={[
                 <th key="th-url">Url</th>,

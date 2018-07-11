@@ -8,12 +8,18 @@ class Patterns extends Component {
     super(props);
     this.state = {
       data: null,
-      patternCriteria: '',
+      criteria:
+        {
+          from: '',
+          fromOut: '',
+          to: '',
+          toOut: ''
+        },
       patternCriteriaOut: '',
       isLoading: false
     };
 
-    ['patternFilter', 'patternFilterOut', 'filterData']
+    ['filterFrom', 'filterOutFrom', 'filterData']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -39,26 +45,50 @@ class Patterns extends Component {
     .catch(err => { throw err });
   }
 
-  patternFilter(criteria) {
-    this.setState({ patternCriteria: criteria });
+  filterFrom(newCriteria) {
+    this.setState((prevState) => {
+      return (
+        {
+          criteria :
+            {
+              from: newCriteria,
+              fromOut: prevState.criteria.fromOut,
+              to: prevState.criteria.to,
+              toOut: prevState.criteria.toOut,
+            }
+        }
+      )
+    });
   }
 
-  patternFilterOut(criteria) {
-    this.setState({ patternCriteriaOut: criteria });
+  filterOutFrom(newCriteria) {
+    this.setState((prevState) => {
+      return (
+        {
+          criteria :
+            {
+              from: prevState.criteria.from,
+              fromOut: newCriteria,
+              to: prevState.criteria.to,
+              toOut: prevState.criteria.toOut,
+            }
+        }
+      )
+    });
   }
 
   filterData(data) {
-    if (this.state.patternCriteria.length > 0) {
+    if (this.state.criteria.from.length > 0) {
       try {
-        data = data.filter(d => d.match(this.state.patternCriteria));
+        data = data.filter(d => d.from.match(this.state.criteria.from));
       }
       catch (Exception){
         console.log('Invalid regex [' + Exception + ']');
       }
     }
-    if (this.state.patternCriteriaOut.length > 0) {
+    if (this.state.criteria.fromOut.length > 0) {
       try {
-        data = data.filter(d => !d.match(this.state.patternCriteriaOut));
+        data = data.filter(d => !d.from.match(this.state.criteria.fromOut));
       }
       catch (Exception) {
         console.log('Invalid regex [' + Exception + ']');
@@ -68,6 +98,10 @@ class Patterns extends Component {
     return data;
   }
 
+  sort(keys, rawData) {
+    return keys.sort((j, k) => !(rawData[j].count > rawData[k].count))
+  }
+
   render() {
     return (
       <div className="patterns">
@@ -75,42 +109,38 @@ class Patterns extends Component {
           <h3>Filters</h3>
           <TextInput
               type='text'
-              name='urlCriteria'
-              initialValue={this.state.patternCriteria}
+              name='criteriaFrom'
+              initialValue={this.state.criteria.from}
               placeholder='[use regex]'
-              onChange={this.patternFilter}
-              label={'Filter-in by pattern'}
-              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.patternCriteria) ? '' : 'error')}
+              onChange={this.filterFrom}
+              label={'Filter-in by FromUrl'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.from) ? '' : 'error')}
           />
           <TextInput
               type='text'
-              name='patternCriteriaOut'
-              initialValue={this.state.patternCriteriaOut}
+              name='criteriaFromOut'
+              initialValue={this.state.criteria.fromOut}
               placeholder='[use regex]'
-              onChange={this.patternFilterOut}
-              label={'Filter-out by pattern'}
-              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.patternCriteriaOut) ? '' : 'error')}
+              onChange={this.filterOutFrom}
+              label={'Filter-out by FromUrl'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.fromOut) ? '' : 'error')}
           />
         </aside>
         <section>
           <Table
-              keys={Utils.normalizeData(this.state.data, this.filterData)}
+              keys={Utils.getKeys(this.filterData(this.state.data))}
               rawMap={this.state.data}
+              sort={this.sort}
               loading={this.state.isLoading}
               headers={[
-                <th key="th-fromto">Pattern</th>,
+                <th key="th-from">From</th>,
+                <th key="th-to">To</th>,
                 <th key="th-count">Count</th>,
               ]}
           >
-            <Col
-                // {from, to, count}
-                data={(datum, key) =>
-                    <div key={key}>
-                      {datum[key].from} --> {datum[key].to}
-                    </div>
-                }
-                width='80%'
-            />
+            {/* {from, to, count} */}
+            <Col data={(datum, key) => datum[key].from} width='40%' />
+            <Col data={(datum, key) => datum[key].to} width='40%' />
             <Col data={(datum, key) => datum[key].count} width='20%' />
           </Table>
         </section>
