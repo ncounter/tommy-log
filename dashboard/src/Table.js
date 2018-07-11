@@ -48,7 +48,18 @@ export class Table extends Component {
           {this.props.children.map((c, i) => <col key={i} width={c.props.width} />)}
         </colgroup>
         <thead>
-          <tr>
+          <tr className='toolbar'>
+            <th colSpan={this.props.headers.length}>
+              <Pagination
+                  dataLength={this.props.keys.length}
+                  currentPage={this.state.currentPage}
+                  itemsPerPage={this.state.itemsPerPage}
+                  onChangePage={this.changePage}
+                  onChangeItemsPerPage={this.changeItemsPerPage}
+              />
+            </th>
+          </tr>
+          <tr className='col-header'>
             {
               this.props.headers.map(h => h)
             }
@@ -85,7 +96,7 @@ export class Table extends Component {
           }
         </tbody>
         <tfoot>
-          <tr>
+          <tr className='toolbar'>
             <td colSpan={this.props.headers.length}>
               <Pagination
                   dataLength={this.props.keys.length}

@@ -67,11 +67,14 @@ table {
   border-collapse: collapse;
   margin: auto;
 }
-table thead th,
-table tfoot td {
+table thead tr.col-header th {
   font-size: 1.1em;
-  background-color: #bcd;
+  background-color: #ddd;
   border: 1px solid #bbb;
+}
+table thead tr.toolbar th,
+table tfoot tr.toolbar td {
+  background-color: #dbd0e4;;
 }
 
 table tr td,
