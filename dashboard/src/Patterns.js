@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { TextInput } from './Fields';
 import { Table, Col } from './Table';
 import Utils from './Utils';
 
@@ -7,10 +8,12 @@ class Patterns extends Component {
     super(props);
     this.state = {
       data: null,
+      patternCriteria: '',
+      patternCriteriaOut: '',
       isLoading: false
     };
 
-    ['filterData']
+    ['patternFilter', 'patternFilterOut', 'filterData']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -36,7 +39,32 @@ class Patterns extends Component {
     .catch(err => { throw err });
   }
 
+  patternFilter(criteria) {
+    this.setState({ patternCriteria: criteria });
+  }
+
+  patternFilterOut(criteria) {
+    this.setState({ patternCriteriaOut: criteria });
+  }
+
   filterData(data) {
+    if (this.state.patternCriteria.length > 0) {
+      try {
+        data = data.filter(d => d.match(this.state.patternCriteria));
+      }
+      catch (Exception){
+        console.log('Invalid regex [' + Exception + ']');
+      }
+    }
+    if (this.state.patternCriteriaOut.length > 0) {
+      try {
+        data = data.filter(d => !d.match(this.state.patternCriteriaOut));
+      }
+      catch (Exception) {
+        console.log('Invalid regex [' + Exception + ']');
+      }
+    }
+
     return data;
   }
 
@@ -45,6 +73,24 @@ class Patterns extends Component {
       <div className="patterns">
         <aside>
           <h3>Filters</h3>
+          <TextInput
+              type='text'
+              name='urlCriteria'
+              initialValue={this.state.patternCriteria}
+              placeholder='[use regex]'
+              onChange={this.patternFilter}
+              label={'Filter-in by pattern'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.patternCriteria) ? '' : 'error')}
+          />
+          <TextInput
+              type='text'
+              name='patternCriteriaOut'
+              initialValue={this.state.patternCriteriaOut}
+              placeholder='[use regex]'
+              onChange={this.patternFilterOut}
+              label={'Filter-out by pattern'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.patternCriteriaOut) ? '' : 'error')}
+          />
         </aside>
         <section>
           <Table
