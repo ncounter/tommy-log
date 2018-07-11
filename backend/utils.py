@@ -66,12 +66,12 @@ def extract_ip_from(source_line):
 def extract_datetime_from(source_line):
     new_datetime = source_line
 
-    pattern = re.compile(r'[0123][0-9]/[A-Z][a-z]{2}/[0-9]{4}:[012][0-9]:[012345][0-9]:[012345][0-9] \+[0-9]{4}', re.MULTILINE|re.IGNORECASE)
+    pattern = re.compile(r'[0123][0-9]/[A-Z][a-z]{2}/[0-9]{4}:[012][0-9]:[012345][0-9]:[012345][0-9]', re.MULTILINE|re.IGNORECASE)
     new_pattern_result = pattern.search(new_datetime)
     if new_pattern_result != None:
         new_datetime = new_pattern_result.group(0)
 
-    new_datetime = datetime.strptime(new_datetime, '%d/%b/%Y:%H:%M:%S +%f')
+    new_datetime = datetime.strptime(new_datetime, '%d/%b/%Y:%H:%M:%S')
     return new_datetime
 
 # print to standard output the EndOfLine character multiple times
