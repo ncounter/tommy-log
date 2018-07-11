@@ -2,6 +2,7 @@
 
 import numpy as np
 import sys, os, re, ConfigParser, json
+from datetime import datetime
 
 CONFIG_KEY_NAME = 'logorator'
 CONFIG_FILE_PATH = './logorator.conf'
@@ -70,6 +71,7 @@ def extract_datetime_from(source_line):
     if new_pattern_result != None:
         new_datetime = new_pattern_result.group(0)
 
+    new_datetime = datetime.strptime(new_datetime, '%d/%b/%Y:%H:%M:%S +%f')
     return new_datetime
 
 # print to standard output the EndOfLine character multiple times
