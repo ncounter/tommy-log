@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import numpy as np
 import sys, os, re, ConfigParser, json
 from datetime import datetime
 import utils
