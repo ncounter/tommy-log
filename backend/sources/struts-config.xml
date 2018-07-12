@@ -1,0 +1,49 @@
+<!DOCTYPE struts-config PUBLIC
+  "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+  "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+
+    <form-beans>
+        <form-bean name="loginForm"
+            type="org.apache.struts.action.DynaActionForm">
+            <form-property name="username" type="java.lang.String"/>
+            <form-property name="password" type="java.lang.String"/>
+            <form-property name="url_bounce" type="java.lang.String"/>
+            <form-property name="request_method" type="java.lang.String"/>
+        </form-bean>
+  </form-beans>
+
+  <global-exceptions>
+    <exception type="" path="" key="date" handler=""/>
+  </global-exceptions>
+
+  <global-forwards>
+    <forward name="login" path="/Login.do" redirect="true" />
+  </global-forwards>
+
+  <!-- ===================================== -->
+  <!-- =          ACTION MAPPINGS          = -->
+  <!-- ===================================== -->
+  <action-mappings>
+
+    <action path="/Login"
+            name="loginForm"
+            scope="request"
+            input="login.jsp"
+            type="LoginAction"
+            className="LoginActionMapping">
+          <forward name="default" path="login.jsp" />
+    </action>
+
+  </action-mappings>
+
+  <!-- ===================================== -->
+  <!-- =              PLUGINS              = -->
+  <!-- ===================================== -->
+
+  <controller processorClass="AuditLogRequestProcessor" nocache="false" locale="false" />
+
+  <message-resources factory="XmlMessageResources" parameter="." null="false"/>
+
+</struts-config>
