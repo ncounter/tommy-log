@@ -141,6 +141,7 @@ class Patterns extends Component {
         </aside>
         <section>
           <Table
+              dataKey={(datum) => datum.from + '->' + datum.to}
               rawData={this.filterData(this.state.data)}
               sort={this.sort}
               loading={this.state.isLoading}

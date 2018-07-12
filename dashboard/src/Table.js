@@ -75,7 +75,7 @@ export class Table extends Component {
               this.currentData().length > 0 ?
                 this.paginatedData(this.props.sort(this.currentData()))
                     .map((datum, index) =>
-                      <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={Object.keys(datum)[0]}>
+                      <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={this.props.dataKey(datum)}>
                         {
                           this.props.children.map((c, i) =>
                             <Col key={c + i} className={c.props.className}

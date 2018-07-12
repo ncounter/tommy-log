@@ -127,6 +127,7 @@ class Stats extends Component {
         </aside>
         <section>
           <Table
+              dataKey={(datum) => Object.keys(datum)[0]}
               rawData={this.filterData(this.state.data)}
               sort={this.sort}
               loading={this.state.isLoading}
