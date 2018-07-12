@@ -14,13 +14,15 @@ class Stats extends Component {
     super(props);
     this.state = {
       data: [],
-      urlCriteria: '',
-      urlCriteriaOut: '',
+      criteria: {
+        show: '',
+        hide: ''
+      },
       hiddenCriteria: Object.values(PATTERN_CRITERIA),
       isLoading: false
     };
 
-    ['urlFilter', 'urlFilterOut', 'filterData']
+    ['filterInOutChange', 'filterData']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -46,12 +48,16 @@ class Stats extends Component {
     .catch(err => { throw err });
   }
 
-  urlFilter(criteria) {
-    this.setState({ urlCriteria: criteria });
-  }
-
-  urlFilterOut(criteria) {
-    this.setState({ urlCriteriaOut: criteria });
+  filterInOutChange(newCriteria, filterKey) {
+    this.setState((prevState) => {
+      const criteria = prevState.criteria;
+      criteria[filterKey] = newCriteria
+      return (
+        {
+          criteria : criteria
+        }
+      )
+    });
   }
 
   toggleHiddenCriteria(criteria) {
@@ -59,17 +65,17 @@ class Stats extends Component {
   }
 
   filterData(data) {
-    if (this.state.urlCriteria.length > 0) {
+    if (this.state.criteria.show.length > 0) {
       try {
-        data = data.filter(d => Object.keys(d)[0].match(this.state.urlCriteria));
+        data = data.filter(d => Object.keys(d)[0].match(this.state.criteria.show));
       }
       catch (Exception){
         console.log('Invalid regex [' + Exception + ']');
       }
     }
-    if (this.state.urlCriteriaOut.length > 0) {
+    if (this.state.criteria.hide.length > 0) {
       try {
-        data = data.filter(d => !Object.keys(d)[0].match(this.state.urlCriteriaOut));
+        data = data.filter(d => !Object.keys(d)[0].match(this.state.criteria.hide));
       }
       catch (Exception) {
         console.log('Invalid regex [' + Exception + ']');
@@ -90,21 +96,21 @@ class Stats extends Component {
           <h3>Filters</h3>
           <TextInput
               type='text'
-              name='urlCriteria'
-              initialValue={this.state.urlCriteria}
+              name='criteriaShow'
+              initialValue={this.state.criteria.show}
               placeholder='[use regex]'
-              onChange={this.urlFilter}
-              label={'Filter-in by url'}
-              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.urlCriteria) ? '' : 'error')}
+              onChange={(value) => this.filterInOutChange(value, 'show')}
+              label={'Show URLs matching'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.show) ? '' : 'error')}
           />
           <TextInput
               type='text'
-              name='urlCriteriaOut'
-              initialValue={this.state.urlCriteriaOut}
+              name='criteriaHide'
+              initialValue={this.state.criteria.hide}
               placeholder='[use regex]'
-              onChange={this.urlFilterOut}
-              label={'Filter-out by url'}
-              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.urlCriteriaOut) ? '' : 'error')}
+              onChange={(value) => this.filterInOutChange(value, 'hide')}
+              label={'Hide URLs matching'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.hide) ? '' : 'error')}
           />
           {
             Object.keys(PATTERN_CRITERIA).map(c =>

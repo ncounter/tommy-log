@@ -10,16 +10,16 @@ class Patterns extends Component {
       data: [],
       criteria:
         {
-          from: '',
-          fromOut: '',
-          to: '',
-          toOut: ''
+          fromShow: '',
+          fromHide: '',
+          toShow: '',
+          toHide: ''
         },
       patternCriteriaOut: '',
       isLoading: false
     };
 
-    ['filterFrom', 'filterOutFrom', 'filterTo', 'filterOutTo', 'filterData']
+    ['filterInOutChange', 'filterData']
       .forEach(method => this[method] = this[method].bind(this));
   }
 
@@ -45,98 +45,46 @@ class Patterns extends Component {
     .catch(err => { throw err });
   }
 
-  filterFrom(newCriteria) {
+  filterInOutChange(newCriteria, filterKey) {
     this.setState((prevState) => {
+      const criteria = prevState.criteria;
+      criteria[filterKey] = newCriteria
       return (
         {
-          criteria :
-            {
-              from: newCriteria,
-              fromOut: prevState.criteria.fromOut,
-              to: prevState.criteria.to,
-              toOut: prevState.criteria.toOut,
-            }
-        }
-      )
-    });
-  }
-
-  filterOutFrom(newCriteria) {
-    this.setState((prevState) => {
-      return (
-        {
-          criteria :
-            {
-              from: prevState.criteria.from,
-              fromOut: newCriteria,
-              to: prevState.criteria.to,
-              toOut: prevState.criteria.toOut,
-            }
-        }
-      )
-    });
-  }
-
-  filterTo(newCriteria) {
-    this.setState((prevState) => {
-      return (
-        {
-          criteria :
-            {
-              from: prevState.criteria.from,
-              fromOut: prevState.criteria.fromOut,
-              to: newCriteria,
-              toOut: prevState.criteria.toOut,
-            }
-        }
-      )
-    });
-  }
-
-  filterOutTo(newCriteria) {
-    this.setState((prevState) => {
-      return (
-        {
-          criteria :
-            {
-              from: prevState.criteria.from,
-              fromOut: prevState.criteria.fromOut,
-              to: prevState.criteria.to,
-              toOut: newCriteria,
-            }
+          criteria : criteria
         }
       )
     });
   }
 
   filterData(data) {
-    if (this.state.criteria.from.length > 0) {
+    if (this.state.criteria.fromShow.length > 0) {
       try {
-        data = data.filter(d => d.from.match(this.state.criteria.from));
+        data = data.filter(d => d.from.match(this.state.criteria.fromShow));
       }
       catch (Exception){
         console.log('Invalid regex [' + Exception + ']');
       }
     }
-    if (this.state.criteria.fromOut.length > 0) {
+    if (this.state.criteria.fromHide.length > 0) {
       try {
-        data = data.filter(d => !d.from.match(this.state.criteria.fromOut));
+        data = data.filter(d => !d.from.match(this.state.criteria.fromHide));
       }
       catch (Exception) {
         console.log('Invalid regex [' + Exception + ']');
       }
     }
-    if (this.state.criteria.to.length > 0) {
+    if (this.state.criteria.toShow.length > 0) {
       try {
-        data = data.filter(d => d.to.match(this.state.criteria.to));
+        data = data.filter(d => d.to.match(this.state.criteria.toShow));
       }
       catch (Exception){
         console.log('Invalid regex [' + Exception + ']');
       }
     }
-    if (this.state.criteria.toOut.length > 0) {
+    if (this.state.criteria.toHide.length > 0) {
       try {
-        data = data.filter(d => !d.to.match(this.state.criteria.toOut));
+        data = data.filter(d => !d.to.match(this.state.criteria.toHide));
       }
       catch (Exception) {
         console.log('Invalid regex [' + Exception + ']');
@@ -156,39 +104,39 @@ class Patterns extends Component {
           <h3>Filters</h3>
           <TextInput
               type='text'
-              name='criteriaFrom'
-              initialValue={this.state.criteria.from}
+              name='criteriaFromShow'
+              initialValue={this.state.criteria.fromShow}
               placeholder='[use regex]'
-              onChange={this.filterFrom}
-              label={'Filter-in by "From"'}
-              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.from) ? '' : 'error')}
+              onChange={(value) => this.filterInOutChange(value, 'fromShow')}
+              label={'Show rows with "From" matching'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.fromShow) ? '' : 'error')}
           />
           <TextInput
               type='text'
-              name='criteriaFromOut'
-              initialValue={this.state.criteria.fromOut}
+              name='criteriaFromHide'
+              initialValue={this.state.criteria.fromHide}
               placeholder='[use regex]'
-              onChange={this.filterOutFrom}
-              label={'Filter-out by "From"'}
-              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.fromOut) ? '' : 'error')}
+              onChange={(value) => this.filterInOutChange(value, 'fromHide')}
+              label={'Hide rows with "From" matching'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.fromHide) ? '' : 'error')}
           />
           <TextInput
               type='text'
-              name='criteriaTo'
-              initialValue={this.state.criteria.to}
+              name='criteriaToShow'
+              initialValue={this.state.criteria.toShow}
               placeholder='[use regex]'
-              onChange={this.filterTo}
-              label={'Filter-in by "To"'}
-              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.to) ? '' : 'error')}
+              onChange={(value) => this.filterInOutChange(value, 'toShow')}
+              label={'Show rows with "To" matching'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.toShow) ? '' : 'error')}
           />
           <TextInput
               type='text'
-              name='criteriaToOut'
-              initialValue={this.state.criteria.toOut}
+              name='criteriaToHide'
+              initialValue={this.state.criteria.toHide}
               placeholder='[use regex]'
-              onChange={this.filterOutTo}
-              label={'Filter-out by "To"'}
-              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.toOut) ? '' : 'error')}
+              onChange={(value) => this.filterInOutChange(value, 'toHide')}
+              label={'Hide rows with "To" matching'}
+              classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.toHide) ? '' : 'error')}
           />
         </aside>
         <section>
