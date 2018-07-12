@@ -65,23 +65,25 @@ class Stats extends Component {
   }
 
   filterData(data) {
-    if (this.state.criteria.show.length > 0) {
-      try {
-        data = data.filter(d => Object.keys(d)[0].match(this.state.criteria.show));
+    if (data && data.length > 0) {
+      if (this.state.criteria.show.length > 0) {
+        try {
+          data = data.filter(d => Object.keys(d)[0].match(this.state.criteria.show));
+        }
+        catch (Exception){
+          console.log('Invalid regex [' + Exception + ']');
+        }
       }
-      catch (Exception){
-        console.log('Invalid regex [' + Exception + ']');
+      if (this.state.criteria.hide.length > 0) {
+        try {
+          data = data.filter(d => !Object.keys(d)[0].match(this.state.criteria.hide));
+        }
+        catch (Exception) {
+          console.log('Invalid regex [' + Exception + ']');
+        }
       }
+      this.state.hiddenCriteria.forEach(c => data = data.filter(d => !Object.keys(d)[0].match(c)));
     }
-    if (this.state.criteria.hide.length > 0) {
-      try {
-        data = data.filter(d => !Object.keys(d)[0].match(this.state.criteria.hide));
-      }
-      catch (Exception) {
-        console.log('Invalid regex [' + Exception + ']');
-      }
-    }
-    this.state.hiddenCriteria.forEach(c => data = data.filter(d => !Object.keys(d)[0].match(c)));
     return data;
   }
 
