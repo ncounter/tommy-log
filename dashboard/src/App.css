@@ -50,10 +50,10 @@ menu .menu-item {
   border-bottom: 3px solid transparent;
 }
 menu .menu-item:hover {
-  border-bottom-color: #ca0;
+  border-bottom-color: #bbb;
 }
 menu .menu-item.active {
-  border-bottom-color: #5a0;
+  border-bottom-color: #ca0;
 }
 
 .stats, .patterns {
