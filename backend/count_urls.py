@@ -33,8 +33,8 @@ def main():
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
    stats_file = open(stats_file_name , 'w+')
 
-   # create a map of { unique_url : occurrence_count }
-   stats_map = {}
+   # create an array of object of [{ unique_url : occurrence_count }]
+   stats_map = []
 
    for source_file_name in source_file_list:
       with open(source_path + source_file_name, 'r') as current_file:
@@ -42,11 +42,15 @@ def main():
             # extract the url from the log line
             current_url = utils.extract_url_from(line)
 
-            # increase the count if already added
-            if current_url in stats_map:
-               stats_map[current_url] = stats_map[current_url] + 1
+            # if added already, increase the counter
+            if any(x for x in stats_map if current_url in x):
+                existing_obj = next(x for x in stats_map if current_url in x)
+                existing_obj[current_url] = existing_obj[current_url] + 1
+            # else, add it with counter = 1
             else:
-               stats_map[current_url] = 1
+                url_obj = {}
+                url_obj[current_url] = 1
+                stats_map.append(url_obj)
 
          current_file.close()
 
