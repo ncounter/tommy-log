@@ -7,7 +7,7 @@ class Patterns extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      data: [],
       criteria:
         {
           from: '',
@@ -33,7 +33,7 @@ class Patterns extends Component {
     this.setState({isLoading: true});
 
     if(!Utils.linkCheck(url)) {
-      this.setState({ data: {}, isLoading : false });
+      this.setState({ data: [], isLoading : false });
       return;
     }
 
@@ -94,12 +94,11 @@ class Patterns extends Component {
         console.log('Invalid regex [' + Exception + ']');
       }
     }
-
     return data;
   }
 
-  sort(keys, rawData) {
-    return keys.sort((j, k) => !(rawData[j].count > rawData[k].count))
+  sort(rawData) {
+    return rawData.sort((d1, d2) => d1.count < d2.count)
   }
 
   render() {
@@ -128,8 +127,7 @@ class Patterns extends Component {
         </aside>
         <section>
           <Table
-              keys={Utils.getKeys(this.filterData(this.state.data))}
-              rawMap={this.state.data}
+              rawData={this.filterData(this.state.data)}
               sort={this.sort}
               loading={this.state.isLoading}
               headers={[
@@ -139,9 +137,9 @@ class Patterns extends Component {
               ]}
           >
             {/* {from, to, count} */}
-            <Col data={(datum, key) => datum[key].from} width='40%' />
-            <Col data={(datum, key) => datum[key].to} width='40%' />
-            <Col data={(datum, key) => datum[key].count} width='20%' />
+            <Col data={(datum) => datum.from} width='40%' />
+            <Col data={(datum) => datum.to} width='40%' />
+            <Col data={(datum) => datum.count} width='20%' />
           </Table>
         </section>
       </div>

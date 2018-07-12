@@ -30,7 +30,7 @@ export class Table extends Component {
 
   changeItemsPerPage(itemsPerPage) {
     var newCurrentPage = this.state.currentPage;
-    const newLastPage = Math.ceil(this.props.keys.length / itemsPerPage);
+    const newLastPage = Math.ceil(this.currentData().length / itemsPerPage);
     if (newLastPage < newCurrentPage) {
       newCurrentPage = newLastPage;
     }
@@ -39,6 +39,10 @@ export class Table extends Component {
 
   paginatedData(data) {
     return data.slice((this.state.currentPage - 1) * this.state.itemsPerPage, this.state.currentPage * this.state.itemsPerPage)
+  }
+
+  currentData() {
+    return this.props.rawData || []
   }
 
   render() {
@@ -51,7 +55,7 @@ export class Table extends Component {
           <tr className='toolbar'>
             <th colSpan={this.props.headers.length}>
               <Pagination
-                  dataLength={this.props.keys.length}
+                  dataLength={this.currentData().length}
                   currentPage={this.state.currentPage}
                   itemsPerPage={this.state.itemsPerPage}
                   onChangePage={this.changePage}
@@ -68,14 +72,14 @@ export class Table extends Component {
         <tbody>
           {
             !this.props.loading ?
-              this.props.keys.length > 0 ?
-                this.paginatedData(this.props.sort(this.props.keys, this.props.rawMap))
-                    .map((k, index) =>
-                      <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={k}>
+              this.currentData().length > 0 ?
+                this.paginatedData(this.props.sort(this.currentData()))
+                    .map((datum, index) =>
+                      <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={Object.keys(datum)[0]}>
                         {
                           this.props.children.map((c, i) =>
                             <Col key={c + i} className={c.props.className}
-                              data={c.props.data(this.props.rawMap, k)}
+                              data={c.props.data(datum)}
                             />
                           )
                         }
@@ -99,7 +103,7 @@ export class Table extends Component {
           <tr className='toolbar'>
             <td colSpan={this.props.headers.length}>
               <Pagination
-                  dataLength={this.props.keys.length}
+                  dataLength={this.currentData().length}
                   currentPage={this.state.currentPage}
                   itemsPerPage={this.state.itemsPerPage}
                   onChangePage={this.changePage}

@@ -13,7 +13,7 @@ class Stats extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      data: [],
       urlCriteria: '',
       urlCriteriaOut: '',
       hiddenCriteria: Object.values(PATTERN_CRITERIA),
@@ -34,7 +34,7 @@ class Stats extends Component {
     this.setState({isLoading: true});
 
     if(!Utils.linkCheck(url)) {
-      this.setState({ data: {}, isLoading : false });
+      this.setState({ data: [], isLoading : false });
       return;
     }
 
@@ -61,7 +61,7 @@ class Stats extends Component {
   filterData(data) {
     if (this.state.urlCriteria.length > 0) {
       try {
-        data = data.filter(d => d.match(this.state.urlCriteria));
+        data = data.filter(d => Object.keys(d)[0].match(this.state.urlCriteria));
       }
       catch (Exception){
         console.log('Invalid regex [' + Exception + ']');
@@ -69,20 +69,18 @@ class Stats extends Component {
     }
     if (this.state.urlCriteriaOut.length > 0) {
       try {
-        data = data.filter(d => !d.match(this.state.urlCriteriaOut));
+        data = data.filter(d => !Object.keys(d)[0].match(this.state.urlCriteriaOut));
       }
       catch (Exception) {
         console.log('Invalid regex [' + Exception + ']');
       }
     }
-
-    this.state.hiddenCriteria.forEach(c => data = data.filter(d => !d.match(c)));
-
+    this.state.hiddenCriteria.forEach(c => data = data.filter(d => !Object.keys(d)[0].match(c)));
     return data;
   }
 
-  sort(keys, rawData) {
-    return keys.sort((j, k) => !(rawData[j] > rawData[k]))
+  sort(rawData) {
+    return rawData.sort((d1, d2) => !(Object.values(d1)[0] > Object.values(d2)[0]))
   }
 
   render() {
@@ -123,8 +121,7 @@ class Stats extends Component {
         </aside>
         <section>
           <Table
-              keys={Utils.normalizeDataByKeys(this.state.data, this.filterData)}
-              rawMap={this.state.data}
+              rawData={this.filterData(this.state.data)}
               sort={this.sort}
               loading={this.state.isLoading}
               headers={[
@@ -132,8 +129,8 @@ class Stats extends Component {
                 <th key="th-count" className="center">Count</th>
               ]}
           >
-            <Col data={(datum, key) => key} width='65%' />
-            <Col data={(datum, key) => datum[key]} className='center' width='35%' />
+            <Col data={(datum) => Object.keys(datum)} width='65%' />
+            <Col data={(datum) => Object.values(datum)} className='center' width='35%' />
           </Table>
         </section>
       </div>
