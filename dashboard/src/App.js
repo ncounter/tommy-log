@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Stats from './Stats';
 import Patterns from './Patterns';
+import KnownRoutes from './KnownRoutes';
 
 class App extends Component {
   constructor(props) {
@@ -31,6 +32,13 @@ class App extends Component {
   }
 
   render() {
+    let pageContent;
+    switch(this.state.page) {
+      case "#Stats": pageContent = <Stats setTitle={(title) => this.setTitle(title)} />; break;
+      case "#Patterns": pageContent = <Patterns setTitle={(title) => this.setTitle(title)} />; break;
+      case "#KnownRoutes": pageContent = <KnownRoutes setTitle={(title) => this.setTitle(title)} />; break;
+    }
+
     return (
       <div>
         <header>
@@ -44,15 +52,15 @@ class App extends Component {
                 <a className={'menu-item ' + (this.state.page === '#Patterns' ? 'active' : '')}
                     href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Patterns</a>
               </li>
+              <li>
+                <a className={'menu-item ' + (this.state.page === '#KnownRoutes' ? 'active' : '')}
+                    href="#KnownRoutes" onClick={() => this.currentPage('#KnownRoutes')}>Known routes</a>
+              </li>
             </ul>
           </menu>
         </header>
         <div className="page-title">{this.state.title}</div>
-        {
-          this.state.page === '#Stats' ?
-            <Stats setTitle={(title) => this.setTitle(title)} />
-            : <Patterns setTitle={(title) => this.setTitle(title)} />
-        }
+        {pageContent}
       </div>
     );
   }
