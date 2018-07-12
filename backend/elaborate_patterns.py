@@ -57,7 +57,7 @@ def main():
 
          current_file.close()
 
-   # list of couple of patterns [{from, to, count}]
+   # create a list of patterns in a shaped object like [{ from: "/from/url", to: "/to/url", count: pattern_count }]
    patterns = []
    # sequence of patterns has to be created by the same ip because it is a user workflow
    for ip in sequence_map.keys():

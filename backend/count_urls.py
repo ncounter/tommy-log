@@ -32,7 +32,7 @@ def main():
    if os.path.exists(stats_file_name): os.remove(stats_file_name)
    stats_file = open(stats_file_name , 'w+')
 
-   # create an array of object of [{ unique_url : occurrence_count }]
+   # create a list of distinct counted URLs in a shaped object like [{ "url" : count }]
    stats_map = []
 
    for source_file_name in source_file_list:
