@@ -34,12 +34,20 @@ class App extends Component {
     return (
       <div>
         <header>
-          <h3>{this.state.title}</h3>
+          <menu>
+            <ul className='menu'>
+              <li>
+                <a className={'menu-item ' + (this.state.page === '#Stats' ? 'active' : '')}
+                    href="#Stats" onClick={() => this.currentPage('#Stats')}>Stats</a>
+              </li>
+              <li>
+                <a className={'menu-item ' + (this.state.page === '#Patterns' ? 'active' : '')}
+                    href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Patterns</a>
+              </li>
+            </ul>
+          </menu>
         </header>
-        <div className='tabs-wrapper'>
-          <a className={'tab ' + (this.state.page === '#Stats' ? 'active' : '')} href="#Stats" onClick={() => this.currentPage('#Stats')}>Stats</a>
-          <a className={'tab ' + (this.state.page === '#Patterns' ? 'active' : '')} href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Patterns</a>
-        </div>
+        <div className="page-title">{this.state.title}</div>
         {
           this.state.page === '#Stats' ?
             <Stats setTitle={(title) => this.setTitle(title)} />
