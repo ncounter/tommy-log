@@ -24,7 +24,7 @@ class Patterns extends Component {
   }
 
   componentWillMount() {
-    this.props.setTitle('Frequent patterns');
+    this.props.setTitle('Frequent patterns workflow');
   }
 
   componentDidMount() {

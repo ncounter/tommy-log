@@ -132,7 +132,7 @@ class Stats extends Component {
               sort={this.sort}
               loading={this.state.isLoading}
               headers={[
-                <th key="th-url">Url</th>,
+                <th key="th-url">URL</th>,
                 <th key="th-count" className="center">Count</th>
               ]}
           >

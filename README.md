@@ -93,8 +93,8 @@ less ./dashboard/public/patterns.json
 ## Frontend: dashboard web page
 
 Available pages:
-- Stats
-- Patterns [wip]
+- Stats - *How many times your urls have been hitten?*
+- Patterns - *Frequent patterns workflow*
 
 ### Requirements
 
