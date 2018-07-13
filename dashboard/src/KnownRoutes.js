@@ -26,7 +26,7 @@ class Patterns extends Component {
   }
 
   componentDidMount() {
-    let url = 'known-uls.json';
+    let url = 'known-urls.json';
 
     this.setState({isLoading: true});
 
