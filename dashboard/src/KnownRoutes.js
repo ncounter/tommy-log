@@ -8,12 +8,10 @@ class Patterns extends Component {
     super(props);
     this.state = {
       data: [],
-      criteria:
-        {
-          show: '',
-          hide: '',
-        },
-      patternCriteriaOut: '',
+      criteria: {
+        show: '',
+        hide: ''
+      },
       isLoading: false
     };
 
@@ -26,19 +24,34 @@ class Patterns extends Component {
   }
 
   componentDidMount() {
-    let url = 'known-urls.json';
+    let urlKnown = 'known-urls.json';
+    let urlStats = 'stats.json';
 
     this.setState({isLoading: true});
 
-    if(!Utils.linkCheck(url)) {
+    if(!Utils.linkCheck(urlKnown) || !Utils.linkCheck(urlStats)) {
       this.setState({ data: [], isLoading : false });
       return;
     }
 
-    fetch(url)
+    fetch(urlKnown)
     .then(res => res.json())
-    .then((jsonData) => {
-      this.setState({ data: jsonData, isLoading: false });
+    .then((jsonDataKnown) => {
+      fetch(urlStats)
+      .then(res2 => res2.json())
+      .then((jsonDataStats) => {
+        const statsKeys = jsonDataStats.map(s => Object.keys(s)[0].toString());
+        const hitUrlsMap = jsonDataStats.filter(s => jsonDataKnown.includes(Object.keys(s)[0]));
+        const neverHitUrls = jsonDataKnown.filter(k => !statsKeys.includes(k));
+        const neverHitUrlsMap = neverHitUrls.map(n => {
+          let obj = {};
+          obj[n] = 0;
+          return obj;
+        });
+        const matchedData = [...hitUrlsMap, ...neverHitUrlsMap];
+        this.setState({ data: matchedData, isLoading: false });
+      })
+      .catch(err2 => { throw err2 });
     })
     .catch(err => { throw err });
   }
@@ -56,27 +69,29 @@ class Patterns extends Component {
   }
 
   filterData(data) {
-    if (this.state.criteria.show.length > 0) {
-      try {
-        data = data.filter(d => d.match(this.state.criteria.show));
+    if (data && data.length > 0) {
+      if (this.state.criteria.show.length > 0) {
+        try {
+          data = data.filter(d => Object.keys(d)[0].match(this.state.criteria.show));
+        }
+        catch (Exception){
+          console.log('Invalid regex [' + Exception + ']');
+        }
       }
-      catch (Exception){
-        console.log('Invalid regex [' + Exception + ']');
-      }
-    }
-    if (this.state.criteria.hide.length > 0) {
-      try {
-        data = data.filter(d => !d.match(this.state.criteria.hide));
-      }
-      catch (Exception) {
-        console.log('Invalid regex [' + Exception + ']');
+      if (this.state.criteria.hide.length > 0) {
+        try {
+          data = data.filter(d => !Object.keys(d)[0].match(this.state.criteria.hide));
+        }
+        catch (Exception) {
+          console.log('Invalid regex [' + Exception + ']');
+        }
       }
     }
     return data;
   }
 
   sort(rawData) {
-    return rawData.sort((d1, d2) => d1.toLowerCase() > d2.toLowerCase())
+    return rawData.sort((d1, d2) => !(Object.values(d1)[0] > Object.values(d2)[0]))
   }
 
   render() {
@@ -90,7 +105,7 @@ class Patterns extends Component {
               initialValue={this.state.criteria.show}
               placeholder='[use regex]'
               onChange={(value) => this.filterInOutChange(value, 'show')}
-              label={'Show rows with "URL" matching'}
+              label={'Show URLs matching'}
               classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.show) ? '' : 'error')}
           />
           <TextInput
@@ -99,22 +114,23 @@ class Patterns extends Component {
               initialValue={this.state.criteria.hide}
               placeholder='[use regex]'
               onChange={(value) => this.filterInOutChange(value, 'hide')}
-              label={'Hide rows with "URL" matching'}
+              label={'Hide URLs matching'}
               classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.hide) ? '' : 'error')}
           />
         </aside>
         <section>
-          <Table
-              dataKey={(datum) => datum}
+        <Table
+              dataKey={(datum) => Object.keys(datum)[0]}
               rawData={this.filterData(this.state.data)}
               sort={this.sort}
               loading={this.state.isLoading}
               headers={[
-                <th key="th-from">Url</th>
+                <th key="th-url">URL</th>,
+                <th key="th-count" className="center">Count</th>
               ]}
           >
-            {/* ["url"] */}
-            <Col data={(datum) => datum} width='100%' />
+            <Col data={(datum) => Object.keys(datum)} width='65%' />
+            <Col data={(datum) => Object.values(datum)} className='center' width='35%' />
           </Table>
         </section>
       </div>
