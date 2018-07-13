@@ -84,3 +84,12 @@ def print_separator():
     print_eol()
     sys.stdout.write('---')
     print_eol()
+
+def validate_param_list(param_list):
+    validation = True
+    for i in range(len(param_list)):
+        param = param_list[i]
+        validation = not (param is None or param == '' or len(param) == 0)
+        if not validation:
+            break
+    return validation

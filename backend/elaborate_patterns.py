@@ -5,6 +5,12 @@ from datetime import datetime
 import utils
 
 def main(source_path, pattern_file_name):
+   if not utils.validate_param_list([source_path, pattern_file_name]):
+      utils.print_eol(2)
+      sys.stdout.writelines('elaborate_patterns.py cannot start, there is an error in received parameters')
+      utils.print_eol(2)
+      return
+
    sys.stdout.writelines('starting elaborate_patterns.py, please wait...')
    utils.print_eol(2)
 

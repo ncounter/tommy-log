@@ -9,7 +9,7 @@ CONFIG_FILE_PATH = './logorator.conf'
 
 def main():
    # load and check all param from the config file
-   sys.stdout.writelines(['AAAloading config parameters from `', CONFIG_FILE_PATH, '`'])
+   sys.stdout.writelines(['loading config parameters from `', CONFIG_FILE_PATH, '`'])
    utils.print_separator()
 
    config = ConfigParser.ConfigParser()

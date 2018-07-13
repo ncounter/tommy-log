@@ -4,6 +4,12 @@ import sys, os, re, json
 import utils
 
 def main(source_path, stats_file_name):
+   if not utils.validate_param_list([source_path, stats_file_name]):
+      utils.print_eol(2)
+      sys.stdout.writelines('count_urls.py cannot start, there is an error in received parameters')
+      utils.print_eol(2)
+      return
+
    sys.stdout.writelines('starting count_urls.py, please wait...')
    utils.print_eol(2)
 
