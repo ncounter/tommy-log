@@ -94,6 +94,9 @@ class Stats extends Component {
   render() {
     return (
       <div className="stats">
+        <div>This is computed taking Tomcat logs and counting how many times a certain URL has been requested.
+          It includes raw and useless URLs like sources [.js files, download of .xml files, dwr requests, etc]</div>
+          <br/><br/>
         <aside>
           <h3>Filters</h3>
           <TextInput

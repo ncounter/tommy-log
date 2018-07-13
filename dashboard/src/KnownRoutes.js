@@ -97,6 +97,8 @@ class Patterns extends Component {
   render() {
     return (
       <div className="patterns">
+        <div>This is computed taking all known URLs in advance (from such a map.xml file for instance) where all possible mapped routes are listed, then extracting how many times each route has been hit by users matching this computation on top of Tomcat logs [see Raw Stats tab].</div>
+        <br/><br/>
         <aside>
           <h3>Filters</h3>
           <TextInput

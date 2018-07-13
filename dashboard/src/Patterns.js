@@ -99,6 +99,9 @@ class Patterns extends Component {
   render() {
     return (
       <div className="patterns">
+        <div>This is computed taking Tomcat logs and counting how many times a certain pair of URLs has been requested in the same sequence (the pair of URLs is counted only if requested from the same ip/user). It includes raw and useless URLs like sources [.js files, download of .xml files, dwr requests, etc], and this leads to a result or a code-path pattern instead. For instance, if a user requests URL b from URL a, and the load of b requires the load of 1.js and 2.js, the pair patterns of URLs will be generated like the following: {"{ from : a, to : 1.js }, { from : 1.js, to : 2.js }, { from : 2.js, to : b }"}
+        </div>
+        <br/><br/>
         <aside>
           <h3>Filters</h3>
           <TextInput

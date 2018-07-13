@@ -46,15 +46,15 @@ class App extends Component {
             <ul className='menu'>
               <li>
                 <a className={'menu-item ' + (this.state.page === '#Stats' ? 'active' : '')}
-                    href="#Stats" onClick={() => this.currentPage('#Stats')}>Stats</a>
-              </li>
-              <li>
-                <a className={'menu-item ' + (this.state.page === '#Patterns' ? 'active' : '')}
-                    href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Patterns</a>
+                    href="#Stats" onClick={() => this.currentPage('#Stats')}>Raw Stats</a>
               </li>
               <li>
                 <a className={'menu-item ' + (this.state.page === '#KnownRoutes' ? 'active' : '')}
-                    href="#KnownRoutes" onClick={() => this.currentPage('#KnownRoutes')}>Known routes</a>
+                    href="#KnownRoutes" onClick={() => this.currentPage('#KnownRoutes')}>Known route stats</a>
+              </li>
+              <li>
+                <a className={'menu-item ' + (this.state.page === '#Patterns' ? 'active' : '')}
+                    href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Raw Patterns</a>
               </li>
             </ul>
           </menu>
