@@ -15,7 +15,6 @@ class Patterns extends Component {
           toShow: '',
           toHide: ''
         },
-      patternCriteriaOut: '',
       isLoading: false
     };
 
