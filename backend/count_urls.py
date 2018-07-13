@@ -1,21 +1,11 @@
 #!/usr/bin/python
 
-import sys, os, re, ConfigParser, json
+import sys, os, re, json
 import utils
 
-CONFIG_KEY_NAME = 'logorator'
-CONFIG_FILE_PATH = './logorator.conf'
-
-def main():
-   # load and check all param from the config file
-   sys.stdout.writelines(['loading config parameters from `', CONFIG_FILE_PATH, '`'])
-   utils.print_separator()
-
-   config = ConfigParser.ConfigParser()
-   config.read(CONFIG_FILE_PATH)
-   
-   source_path = config.get(CONFIG_KEY_NAME, 'tomcat_log_path')
-   stats_file_name = config.get(CONFIG_KEY_NAME, 'stats_file')
+def main(source_path, stats_file_name):
+   sys.stdout.writelines('starting count_urls.py, please wait...')
+   utils.print_eol(2)
 
    # evaluate files with the following name pattern only
    regex = re.compile(r'localhost_access_log.(\d{4,}-\d{2,}-\d{2,}).txt')
@@ -62,6 +52,3 @@ def main():
    stats_file.close()
    sys.stdout.writelines(['A new stats file has been generated in `', os.path.abspath(stats_file.name), '`'])
    sys.stdout.write('\n')
-
-if __name__ == "__main__":
-    main()

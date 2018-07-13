@@ -1,27 +1,15 @@
 #!/usr/bin/python
 
 import numpy as np
-import sys, os, re, ConfigParser, json
+import sys, os, re, json
 from datetime import datetime
 import utils
 import xml.etree.ElementTree as ET
 
-CONFIG_KEY_NAME = 'logorator'
-CONFIG_FILE_PATH = './logorator.conf'
+def main(known_urls_source_file_name, known_urls_prefix, known_urls_suffix, known_urls_output_name):
+   sys.stdout.writelines('starting known_urls.py, please wait...')
+   utils.print_eol(2)
 
-def main():
-   # load and check all param from the config file
-   sys.stdout.writelines(['loading config parameters from `', CONFIG_FILE_PATH, '`'])
-   utils.print_separator()
-
-   config = ConfigParser.ConfigParser()
-   config.read(CONFIG_FILE_PATH)
-   
-   known_urls_source_file_name = config.get(CONFIG_KEY_NAME, 'known_urls_source')
-   known_urls_prefix = config.get(CONFIG_KEY_NAME, 'known_urls_prefix')
-   known_urls_suffix = config.get(CONFIG_KEY_NAME, 'known_urls_suffix')
-   known_urls_output_name = config.get(CONFIG_KEY_NAME, 'known_urls_output')
-   
    # if output file exists, remove it and recreate it
    if os.path.exists(known_urls_output_name): os.remove(known_urls_output_name)
    known_urls_output = open(known_urls_output_name , 'w+')
@@ -46,6 +34,3 @@ def main():
    known_urls_output.close()
    sys.stdout.writelines(['A new file has been generated in `', os.path.abspath(known_urls_output.name), '`'])
    sys.stdout.write('\n')
-
-if __name__ == "__main__":
-    main()
