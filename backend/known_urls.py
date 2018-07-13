@@ -17,7 +17,7 @@ def main():
    config = ConfigParser.ConfigParser()
    config.read(CONFIG_FILE_PATH)
    
-   known_urls_file_name = config.get(CONFIG_KEY_NAME, 'known_urls_file')
+   known_urls_source_file_name = config.get(CONFIG_KEY_NAME, 'known_urls_source')
    known_urls_prefix = config.get(CONFIG_KEY_NAME, 'known_urls_prefix')
    known_urls_suffix = config.get(CONFIG_KEY_NAME, 'known_urls_suffix')
    known_urls_output_name = config.get(CONFIG_KEY_NAME, 'known_urls_output')
@@ -26,21 +26,19 @@ def main():
    if os.path.exists(known_urls_output_name): os.remove(known_urls_output_name)
    known_urls_output = open(known_urls_output_name , 'w+')
 
-   # create a list of shaped object like [{ url: "/url" }]
+   # create a list of string ["/url"]
    url_set = []
-   if os.path.exists(known_urls_file_name):
+   if os.path.exists(known_urls_source_file_name):
       # log "file found" to screen
-      sys.stdout.writelines('"' + known_urls_file_name + '" found, reading now...')
+      sys.stdout.writelines('"' + known_urls_source_file_name + '" found, reading now...')
       utils.print_separator()
 
-      tree = ET.parse(known_urls_file_name)
+      tree = ET.parse(known_urls_source_file_name)
       root = tree.getroot()
       actions_map = root.findall('.//action-mappings/action')
 
       for action in actions_map:
-         new_obj = {}
-         new_obj['url'] = known_urls_prefix + action.attrib['path'] + known_urls_suffix
-         url_set.append(new_obj)
+         url_set.append(known_urls_prefix + action.attrib['path'] + known_urls_suffix)
 
    # write url list into JSON format
    utils.write_line(known_urls_output, json.dumps(url_set))
