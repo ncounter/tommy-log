@@ -39,4 +39,4 @@ def main(known_urls_source_file_name, known_urls_prefix, known_urls_suffix, know
 
    known_urls_output.close()
    sys.stdout.writelines(['A new file has been generated in `', os.path.abspath(known_urls_output.name), '`'])
-   sys.stdout.write('\n')
+   utils.print_eol(2)

@@ -82,4 +82,4 @@ def main(source_path, pattern_file_name):
 
    pattern_file.close()
    sys.stdout.writelines(['A new pattern file has been generated in `', os.path.abspath(pattern_file.name), '`'])
-   sys.stdout.write('\n')
+   utils.print_eol(2)

@@ -57,4 +57,4 @@ def main(source_path, stats_file_name):
 
    stats_file.close()
    sys.stdout.writelines(['A new stats file has been generated in `', os.path.abspath(stats_file.name), '`'])
-   sys.stdout.write('\n')
+   utils.print_eol(2)
