@@ -46,10 +46,11 @@ export class Table extends Component {
   }
 
   render() {
+    const children = Array.isArray(this.props.children) ? this.props.children : [this.props.children];
     return (
       <table>
         <colgroup>
-          {this.props.children.map((c, i) => <col key={i} width={c.props.width} />)}
+          {children.map((c, i) => <col key={i} width={c.props.width} />)}
         </colgroup>
         <thead>
           <tr className='toolbar'>
@@ -77,7 +78,7 @@ export class Table extends Component {
                     .map((datum, index) =>
                       <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'} key={this.props.dataKey(datum)}>
                         {
-                          this.props.children.map((c, i) =>
+                          children.map((c, i) =>
                             <Col key={c + i} className={c.props.className}
                               data={c.props.data(datum)}
                             />
