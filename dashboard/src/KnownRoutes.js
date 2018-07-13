@@ -58,7 +58,7 @@ class Patterns extends Component {
   filterData(data) {
     if (this.state.criteria.show.length > 0) {
       try {
-        data = data.filter(d => d.url.match(this.state.criteria.show));
+        data = data.filter(d => d.match(this.state.criteria.show));
       }
       catch (Exception){
         console.log('Invalid regex [' + Exception + ']');
@@ -66,7 +66,7 @@ class Patterns extends Component {
     }
     if (this.state.criteria.hide.length > 0) {
       try {
-        data = data.filter(d => !d.url.match(this.state.criteria.hide));
+        data = data.filter(d => !d.match(this.state.criteria.hide));
       }
       catch (Exception) {
         console.log('Invalid regex [' + Exception + ']');
@@ -76,7 +76,7 @@ class Patterns extends Component {
   }
 
   sort(rawData) {
-    return rawData.sort((d1, d2) => d1.url.toLowerCase() > d2.url.toLowerCase())
+    return rawData.sort((d1, d2) => d1.toLowerCase() > d2.toLowerCase())
   }
 
   render() {
@@ -105,7 +105,7 @@ class Patterns extends Component {
         </aside>
         <section>
           <Table
-              dataKey={(datum) => datum.url}
+              dataKey={(datum) => datum}
               rawData={this.filterData(this.state.data)}
               sort={this.sort}
               loading={this.state.isLoading}
@@ -113,8 +113,8 @@ class Patterns extends Component {
                 <th key="th-from">Url</th>
               ]}
           >
-            {/* {url} */}
-            <Col data={(datum) => datum.url} width='100%' />
+            {/* ["url"] */}
+            <Col data={(datum) => datum} width='100%' />
           </Table>
         </section>
       </div>
