@@ -17,36 +17,36 @@ def main():
    config = ConfigParser.ConfigParser()
    config.read(CONFIG_FILE_PATH)
    
-   struts_file_name = config.get(CONFIG_KEY_NAME, 'struts_file')
-   struts_url_prefix = config.get(CONFIG_KEY_NAME, 'struts_url_prefix')
-   struts_url_suffix = config.get(CONFIG_KEY_NAME, 'struts_url_suffix')
-   struts_output_name = config.get(CONFIG_KEY_NAME, 'struts_output')
+   known_urls_file_name = config.get(CONFIG_KEY_NAME, 'known_urls_file')
+   known_urls_prefix = config.get(CONFIG_KEY_NAME, 'known_urls_prefix')
+   known_urls_suffix = config.get(CONFIG_KEY_NAME, 'known_urls_suffix')
+   known_urls_output_name = config.get(CONFIG_KEY_NAME, 'known_urls_output')
    
    # if output file exists, remove it and recreate it
-   if os.path.exists(struts_output_name): os.remove(struts_output_name)
-   struts_output = open(struts_output_name , 'w+')
+   if os.path.exists(known_urls_output_name): os.remove(known_urls_output_name)
+   known_urls_output = open(known_urls_output_name , 'w+')
 
    # create a list of shaped object like [{ url: "/url" }]
    url_set = []
-   if os.path.exists(struts_file_name):
+   if os.path.exists(known_urls_file_name):
       # log "file found" to screen
-      sys.stdout.writelines('"' + struts_file_name + '" found, reading now...')
+      sys.stdout.writelines('"' + known_urls_file_name + '" found, reading now...')
       utils.print_separator()
 
-      tree = ET.parse(struts_file_name)
+      tree = ET.parse(known_urls_file_name)
       root = tree.getroot()
       actions_map = root.findall('.//action-mappings/action')
 
       for action in actions_map:
          new_obj = {}
-         new_obj['url'] = struts_url_prefix + action.attrib['path'] + struts_url_suffix
+         new_obj['url'] = known_urls_prefix + action.attrib['path'] + known_urls_suffix
          url_set.append(new_obj)
 
    # write url list into JSON format
-   utils.write_line(struts_output, json.dumps(url_set))
+   utils.write_line(known_urls_output, json.dumps(url_set))
 
-   struts_output.close()
-   sys.stdout.writelines(['A new file has been generated in `', os.path.abspath(struts_output.name), '`'])
+   known_urls_output.close()
+   sys.stdout.writelines(['A new file has been generated in `', os.path.abspath(known_urls_output.name), '`'])
    sys.stdout.write('\n')
 
 if __name__ == "__main__":
