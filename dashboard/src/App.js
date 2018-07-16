@@ -54,7 +54,7 @@ class App extends Component {
               </li>
               <li>
                 <a className={'menu-item ' + (this.state.page === '#Patterns' ? 'active' : '')}
-                    href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Raw Patterns</a>
+                    href="#Patterns" onClick={() => this.currentPage('#Patterns')}>Refined Patterns</a>
               </li>
             </ul>
           </menu>

@@ -4,8 +4,8 @@ import sys, os, re, json
 from datetime import datetime
 import utils
 
-def main(source_path, pattern_file_name):
-   if not utils.validate_param_list([source_path, pattern_file_name]):
+def main(source_path, pattern_file_name, pattern_url_known):
+   if not utils.validate_param_list([source_path, pattern_file_name, pattern_url_known]):
       utils.print_eol(2)
       sys.stdout.writelines('elaborate_patterns.py cannot start, there is an error in received parameters')
       utils.print_eol(2)
@@ -40,16 +40,19 @@ def main(source_path, pattern_file_name):
             url = utils.extract_url_from(line)
             datetime = utils.extract_datetime_from(line)
 
-            obj = {}
-            obj['url'] = url
-            obj['datetime'] = datetime.strftime('%Y-%m-%d %H:%M:%S')
-            if ip in sequence_map.keys():
-               existing_values = list()
-               existing_values.extend(sequence_map[ip])
-               existing_values.append(obj)
-               sequence_map[ip] = existing_values
-            else:
-               sequence_map[ip] = [obj]
+            url_pattern = re.compile(pattern_url_known, re.MULTILINE|re.IGNORECASE)
+            new_url_pattern_result = url_pattern.search(url)
+            if new_url_pattern_result != None:
+               obj = {}
+               obj['url'] = url
+               obj['datetime'] = datetime.strftime('%Y-%m-%d %H:%M:%S')
+               if ip in sequence_map.keys():
+                  existing_values = list()
+                  existing_values.extend(sequence_map[ip])
+                  existing_values.append(obj)
+                  sequence_map[ip] = existing_values
+               else:
+                  sequence_map[ip] = [obj]
 
          current_file.close()
 

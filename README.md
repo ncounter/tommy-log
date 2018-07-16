@@ -113,7 +113,7 @@ python backend/logorator.py
 Available pages:
 - Raw Stats - *How many times your urls have been hitten?* [[see here](https://github.com/ncounter/logorator#hit-urls-statistics)]
 - Known route Stats - *Which known routes have been hit the most, and which never?* [[see here](https://github.com/ncounter/logorator#hit-urls-statistics-from-a-given-list-of-routes)]
-- Raw Patterns - *Frequent patterns workflow* [[see here](https://github.com/ncounter/logorator#most-frequent-patterns-from-to-urls)]
+- Refined Patterns - *Frequent patterns workflow* [[see here](https://github.com/ncounter/logorator#most-frequent-patterns-from-to-urls)]
 
 ### Requirements
 

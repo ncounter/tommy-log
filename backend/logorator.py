@@ -21,7 +21,8 @@ def main():
    count_urls.main(source_path, stats_file_name)
 
    pattern_file_name = config.get(CONFIG_KEY_NAME, 'pattern_file')
-   elaborate_patterns.main(source_path, pattern_file_name)
+   pattern_url_known = config.get(CONFIG_KEY_NAME, 'pattern_url_known')
+   elaborate_patterns.main(source_path, pattern_file_name, pattern_url_known)
 
    known_urls_source_file_name = config.get(CONFIG_KEY_NAME, 'known_urls_source')
    known_urls_prefix = config.get(CONFIG_KEY_NAME, 'known_urls_prefix')
