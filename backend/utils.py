@@ -74,6 +74,24 @@ def extract_datetime_from(source_line):
     new_datetime = datetime.strptime(new_datetime, '%d/%b/%Y:%H:%M:%S')
     return new_datetime
 
+def extract_method_from(source_line):
+    new_method = source_line
+
+    # save line request only, getting rid of %h %l %u %t %s and %b
+    # keep only the %r (everything between '"' '"')
+    pattern = re.compile(r'["].*["]', re.MULTILINE|re.IGNORECASE)
+    new_pattern_result = pattern.search(new_method)
+    if new_pattern_result != None :
+        new_method = new_pattern_result.group(0)
+
+    # extract the method from the request
+    pattern = re.compile(r'(GET|POST|DELETE|PUT)', re.MULTILINE|re.IGNORECASE)
+    new_method_result = pattern.search(new_method)
+    if new_method_result != None:
+        new_method = new_method_result.group(0)
+
+    return new_method
+
 # print to standard output the EndOfLine character multiple times
 def print_eol(time = 1):
     for t in range(0,time):
@@ -98,5 +116,6 @@ def get_log_row_object(source_line):
     obj = {}
     obj['url'] = extract_url_from(source_line)
     obj['ip'] = extract_ip_from(source_line)
+    obj['method'] = extract_method_from(source_line)
     obj['date'] = extract_datetime_from(source_line).strftime('%Y-%m-%d %H:%M:%S')
     return obj
