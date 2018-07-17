@@ -39,6 +39,7 @@ def main(source_path, pattern_file_name, pattern_url_known):
             ip = utils.extract_ip_from(line)
             url = utils.extract_url_from(line)
             datetime = utils.extract_datetime_from(line)
+            method = utils.extract_method_from(line)
 
             url_pattern = re.compile(pattern_url_known, re.MULTILINE|re.IGNORECASE)
             new_url_pattern_result = url_pattern.search(url)
@@ -46,6 +47,7 @@ def main(source_path, pattern_file_name, pattern_url_known):
                obj = {}
                obj['url'] = url
                obj['datetime'] = datetime.strftime('%Y-%m-%d %H:%M:%S')
+               obj['method'] = method
                if ip in sequence_map.keys():
                   existing_values = list()
                   existing_values.extend(sequence_map[ip])
@@ -69,14 +71,14 @@ def main(source_path, pattern_file_name, pattern_url_known):
          # occurrencies of the same from-to pattern
 
          # if added already, increase the counter
-         if any(x for x in patterns if x['from'] == current_item['url'] and x['to'] == next_item['url']):
-            existing_obj = next(x for x in patterns if x['from'] == current_item['url'] and x['to'] == next_item['url'])
+         if any(x for x in patterns if x['from']['url'] == current_item['url'] and x['to']['url'] == next_item['url']):
+            existing_obj = next(x for x in patterns if x['from']['url'] == current_item['url'] and x['to']['url'] == next_item['url'])
             existing_obj['count'] = existing_obj['count'] + 1
          # else, add it with counter = 1
          else:
             pattern_obj = {}
-            pattern_obj['from'] = current_item['url']
-            pattern_obj['to'] = next_item['url']
+            pattern_obj['from'] = current_item
+            pattern_obj['to'] = next_item
             pattern_obj['count'] = 1
             patterns.append(pattern_obj)
 

@@ -59,7 +59,7 @@ class Patterns extends Component {
   filterData(data) {
     if (this.state.criteria.fromShow.length > 0) {
       try {
-        data = data.filter(d => d.from.match(this.state.criteria.fromShow));
+        data = data.filter(d => d.from.url.match(this.state.criteria.fromShow));
       }
       catch (Exception){
         console.log('Invalid regex [' + Exception + ']');
@@ -67,7 +67,7 @@ class Patterns extends Component {
     }
     if (this.state.criteria.fromHide.length > 0) {
       try {
-        data = data.filter(d => !d.from.match(this.state.criteria.fromHide));
+        data = data.filter(d => !d.from.url.match(this.state.criteria.fromHide));
       }
       catch (Exception) {
         console.log('Invalid regex [' + Exception + ']');
@@ -75,7 +75,7 @@ class Patterns extends Component {
     }
     if (this.state.criteria.toShow.length > 0) {
       try {
-        data = data.filter(d => d.to.match(this.state.criteria.toShow));
+        data = data.filter(d => d.to.url.match(this.state.criteria.toShow));
       }
       catch (Exception){
         console.log('Invalid regex [' + Exception + ']');
@@ -83,7 +83,7 @@ class Patterns extends Component {
     }
     if (this.state.criteria.toHide.length > 0) {
       try {
-        data = data.filter(d => !d.to.match(this.state.criteria.toHide));
+        data = data.filter(d => !d.to.url.match(this.state.criteria.toHide));
       }
       catch (Exception) {
         console.log('Invalid regex [' + Exception + ']');
@@ -143,20 +143,24 @@ class Patterns extends Component {
         </aside>
         <section>
           <Table
-              dataKey={(datum) => datum.from + '->' + datum.to}
+              dataKey={(datum) => datum.from.url + '->' + datum.to.url}
               rawData={this.filterData(this.state.data)}
               sort={this.sort}
               loading={this.state.isLoading}
               headers={[
                 <th key="th-from">From</th>,
+                <th key="th-from-method">Method</th>,
                 <th key="th-to">To</th>,
+                <th key="th-to-method">Method</th>,
                 <th key="th-count">Count</th>,
               ]}
           >
             {/* {from, to, count} */}
-            <Col data={(datum) => datum.from} width='40%' />
-            <Col data={(datum) => datum.to} width='40%' />
-            <Col data={(datum) => datum.count} width='20%' />
+            <Col data={(datum) => datum.from.url} width='35%' />
+            <Col data={(datum) => datum.from.method} width='12%' />
+            <Col data={(datum) => datum.to.url} width='35%' />
+            <Col data={(datum) => datum.to.method} width='12%' />
+            <Col data={(datum) => datum.count} width='6%' />
           </Table>
         </section>
       </div>
