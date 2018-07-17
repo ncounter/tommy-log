@@ -93,3 +93,10 @@ def validate_param_list(param_list):
         if not validation:
             break
     return validation
+
+def get_log_row_object(source_line):
+    obj = {}
+    obj['url'] = extract_url_from(source_line)
+    obj['ip'] = extract_ip_from(source_line)
+    obj['date'] = extract_datetime_from(source_line).strftime('%Y-%m-%d %H:%M:%S')
+    return obj
