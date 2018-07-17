@@ -15,6 +15,16 @@ function validateRegEx(exp) {
   return true;
 }
 
+function validateNumeric(value) {
+  try {
+    value.match('\d');
+  }
+  catch (Exception){
+    return false;
+  }
+  return true;
+}
+
 function getKeys(data) {
   if (data) {
     return Object.keys(data);
@@ -42,6 +52,7 @@ function toggleElementFromArray(element, array) {
 module.exports = {
   linkCheck: linkCheck,
   validateRegEx: validateRegEx,
+  validateNumeric: validateNumeric,
   normalizeDataByKeys: normalizeDataByKeys,
   getKeys: getKeys,
   toggleElementFromArray

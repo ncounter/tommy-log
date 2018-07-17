@@ -16,7 +16,8 @@ class Stats extends Component {
       data: [],
       criteria: {
         show: '',
-        hide: ''
+        hide: '',
+        count: ''
       },
       hiddenCriteria: Object.values(PATTERN_CRITERIA),
       isLoading: false
@@ -82,6 +83,14 @@ class Stats extends Component {
           console.log('Invalid regex [' + Exception + ']');
         }
       }
+      if (this.state.criteria.count.length > 0) {
+        try {
+          data = data.filter(d => Object.values(d)[0] >= this.state.criteria.count);
+        }
+        catch (Exception) {
+          console.log('Invalid regex [' + Exception + ']');
+        }
+      }
       this.state.hiddenCriteria.forEach(c => data = data.filter(d => !Object.keys(d)[0].match(c)));
     }
     return data;
@@ -129,6 +138,15 @@ class Stats extends Component {
               />
             )
           }
+          <TextInput
+              type='number'
+              name='criteriaCount'
+              initialValue={this.state.criteria.count}
+              placeholder='0'
+              onChange={(value) => this.filterInOutChange(value, 'count')}
+              label={'Hide URLs with count greater than'}
+              classStyle={'d-inline-block ' + (Utils.validateNumeric(this.state.criteria.count) ? '' : 'error')}
+          />
         </aside>
         <section>
           <Table

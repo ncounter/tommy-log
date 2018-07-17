@@ -127,6 +127,9 @@ table tbody tr:hover td {
 .form-field-wrapper input[type="text"] {
   width: 50%;
 }
+.form-field-wrapper input[type="number"] {
+  padding-right: 0em;
+}
 .form-field-wrapper.error input {
   border-color: #f30;
 }

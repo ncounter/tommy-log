@@ -10,7 +10,8 @@ class Patterns extends Component {
       data: [],
       criteria: {
         show: '',
-        hide: ''
+        hide: '',
+        count: ''
       },
       isLoading: false
     };
@@ -86,6 +87,14 @@ class Patterns extends Component {
           console.log('Invalid regex [' + Exception + ']');
         }
       }
+      if (this.state.criteria.count.length > 0) {
+        try {
+          data = data.filter(d => Object.values(d)[0] >= this.state.criteria.count);
+        }
+        catch (Exception) {
+          console.log('Invalid regex [' + Exception + ']');
+        }
+      }
     }
     return data;
   }
@@ -118,6 +127,15 @@ class Patterns extends Component {
               onChange={(value) => this.filterInOutChange(value, 'hide')}
               label={'Hide URLs matching'}
               classStyle={'d-inline-block ' + (Utils.validateRegEx(this.state.criteria.hide) ? '' : 'error')}
+          />
+          <TextInput
+              type='number'
+              name='criteriaCount'
+              initialValue={this.state.criteria.count}
+              placeholder='0'
+              onChange={(value) => this.filterInOutChange(value, 'count')}
+              label={'Hide URLs with count greater than'}
+              classStyle={'d-inline-block ' + (Utils.validateNumeric(this.state.criteria.count) ? '' : 'error')}
           />
         </aside>
         <section>
