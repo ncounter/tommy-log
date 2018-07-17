@@ -71,8 +71,17 @@ def main(source_path, pattern_file_name, pattern_url_known):
          # occurrencies of the same from-to pattern
 
          # if added already, increase the counter
-         if any(x for x in patterns if x['from']['url'] == current_item['url'] and x['to']['url'] == next_item['url']):
-            existing_obj = next(x for x in patterns if x['from']['url'] == current_item['url'] and x['to']['url'] == next_item['url'])
+         if any(x for x in patterns
+               if x['from']['url'] == current_item['url']
+                  and x['to']['url'] == next_item['url']
+                  and x['from']['method'] == current_item['method']
+                  and x['to']['method'] == next_item['method']):
+            existing_obj = next(x for x in patterns
+                  if x['from']['url'] == current_item['url']
+                     and x['to']['url'] == next_item['url']
+                     and x['from']['method'] == current_item['method']
+                     and x['to']['method'] == next_item['method'])
+
             existing_obj['count'] = existing_obj['count'] + 1
          # else, add it with counter = 1
          else:
